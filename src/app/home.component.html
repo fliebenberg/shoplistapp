@@ -1,0 +1,11 @@
+<div *ngIf='!authService.authenticated'>
+  <h3>No user is logged in.</h3>
+  <h3>If you are already registered, please login.</h3>
+  <a routerLink="login">Login</a>
+  <h3>If you new, please sign-in.</h3>
+  <button (click)="signUpUser()">Sign-up</button>
+</div>
+<div *ngIf='authService.authenticated'>
+  <h3>Welcome {{authService.currentUser.displayName}}</h3>
+  <button (click)="logoutUser()">Logout</button>
+</div>

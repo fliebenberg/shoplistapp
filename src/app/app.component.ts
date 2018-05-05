@@ -14,16 +14,8 @@ export class AppComponent {
   constructor(public authService: MyAuthService) {
   }
 
-  loginUser() {
-    console.log("Logging in user with Google");
-    this.authService.logInGoogle();
-  }
-
   signupUser() {
 
   }
 
-  logoutUser() {
-    this.authService.logOut();
-  }
 }
