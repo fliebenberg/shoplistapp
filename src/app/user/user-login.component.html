@@ -1,4 +1,42 @@
-<p>
-  user-login works!
-</p>
-<button (click)="loginUser()">Login</button>
+<div class='container'>
+  <h4 *ngIf= 'errorMsg.length > 0' class='alert alert-danger'>{{errorMsg}}</h4>
+  <h1>User Login</h1>
+  <button class='btn' *ngIf='showGoogle' (click)="loginGoogleUser()">
+    <i class='fab fa-google'></i>Login with Google</button>
+  <br>
+  <button class='btn' *ngIf='showFacebook' (click)="loginFacebookUser()">
+    <i class='fab fa-facebook'></i>Login with Facebook</button>
+  <br>
+  <button class='btn' *ngIf='showTwitter' (click)="loginTwitterUser()">
+    <i class='fab fa-twitter'></i>Login with Twitter</button>
+  <br>
+  <div [hidden] = '!showEmailPassword'>
+    <form #loginForm='ngForm'>
+      <h3>Login with email and password</h3>
+      <div class='form-group'>
+        <label for="email">Email</label>
+        <input type="email" required [(ngModel)]='userEmail' #emailInput='ngModel' class='form-control' placeholder='Email' name='email'
+          id='email'>
+        <div [hidden]='emailInput.valid || emailInput.pristine' class='alert alert-danger'>
+          Email is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" required [(ngModel)]='userPassword' #passwordInput='ngModel' class='form-control' placeholder='Password'
+          name="password" id="password">
+        <div [hidden]='passwordInput.valid || passwordInput.pristine' class='alert alert-danger'>
+          Password is required
+        </div>
+      </div>
+      <button [disabled]='loginForm.invalid || loginForm.pristine' (click)='loginEmailPassword(userEmail,userPassword)' class='btn btn-success'>
+        Login
+      </button>
+      <h5>
+        <a href=""></a> Sign-up</h5>
+    </form>
+  </div>
+  <p>{{userEmail}} | {{userPassword}} | {{loginForm.valid}} | {{loginForm.pristine}}</p>
+  <br>
+  <br>
+</div>
