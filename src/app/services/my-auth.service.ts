@@ -30,10 +30,23 @@ export class MyAuthService {
     return this.authenticated ? this.authState : null;
   }
 
+  newEmailPasswordCredential(email: string, password: string) {
+    return firebase.auth.EmailAuthProvider.credential(email, password);
+  }
+
+  signupEmailPassword(email: string, password: string) {
+    console.log('Registering user with email and password...');
+    return this.afAuth.auth.createUserWithEmailAndPassword(email, password).then(
+      credential => {
+        this.authState = credential.user;
+      }
+    );
+  }
+
   loginEmailPassword(email: string, password: string) {
     console.log ('Logging in with Email and Password...');
     return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(
-      (credential) => {
+      credential => {
         this.authState = credential.user;
       }
     );
@@ -59,18 +72,14 @@ export class MyAuthService {
 
   private socialLogin(provider) {
     return this.afAuth.auth.signInWithPopup(provider).then(
-      (credential) => {
+      credential => {
         this.authState = credential.user;
-      }).catch((error) => {
-        console.log("Could not log user in. Error message: " + error.message);
-        console.log('Error code:' + error.code);
-        return error;
       });
   }
 
-  logOut(route: string) {
+  logOut(route?: string) {
     this.afAuth.auth.signOut().then(() => {
-      this.router.navigate([route]);
+      if (route) { this.router.navigate([route]); }
     });
   }
 }

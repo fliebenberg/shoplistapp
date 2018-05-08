@@ -6,6 +6,6 @@
   <button (click)="signUpUser()">Sign-up</button>
 </div>
 <div *ngIf='authService.authenticated'>
-  <h3>Welcome {{authService.currentUser.displayName}}</h3>
+  <h3>Welcome {{authService.currentUser.displayName? authService.currentUser.displayName: authService.currentUser.email}}</h3>
   <button (click)="logoutUser()">Logout</button>
 </div>
