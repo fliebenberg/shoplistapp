@@ -1,11 +1,11 @@
-<div *ngIf='!authService.authenticated'>
-  <h3>No user is logged in.</h3>
-  <h3>If you are already registered, please login.</h3>
-  <a routerLink="login">Login</a>
-  <h3>If you new, please sign-in.</h3>
-  <button (click)="signUpUser()">Sign-up</button>
-</div>
-<div *ngIf='authService.authenticated'>
-  <h3>Welcome {{authService.currentUser.displayName? authService.currentUser.displayName: authService.currentUser.email}}</h3>
-  <button (click)="logoutUser()">Logout</button>
+<div class='jumbotron'>
+  <h3 class='text-center col-12'>
+    Welcome to ShopList{{authService.currentUser?' '+authService.currentUser.displayName:''}}!
+  </h3>
+  <h4 class='text-center col-12'>The best Shopping List app on the web.</h4>
+  <br>
+  <div class='row justify-content-between' *ngIf='!authService.authenticated'>
+    <button class='btn btn-success col-3 w-25' type='button' routerLink="/login">Sign In</button>
+    <button class='btn btn-warning col-3 w-25' type='button' routerLink="/signup">Sign Up</button>
+  </div>
 </div>

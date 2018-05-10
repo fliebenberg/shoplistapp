@@ -66,7 +66,7 @@ export class UserLoginComponent implements OnInit {
       if (this.newProviderCredential) {
         this.linkNewProvider();
       }
-      this.router.navigate(['']);
+      this.router.navigate(['/']);
     })
     .catch((error) => {
       console.log('Google login error.');
@@ -82,7 +82,7 @@ export class UserLoginComponent implements OnInit {
       if (this.newProviderCredential) {
         this.linkNewProvider();
       }
-      this.router.navigate(['']);
+      this.router.navigate(['/']);
     })
     .catch((error) => {
       this.handleError(error, error.email);

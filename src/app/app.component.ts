@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { MyAuthService } from './services/my-auth.service';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { FirebaseApp } from 'angularfire2';
 
 @Component({
   selector: 'app-root',
@@ -9,13 +7,9 @@ import { FirebaseApp } from 'angularfire2';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = "Fred's ShopList App";
+  title = "Shop List";
 
   constructor(public authService: MyAuthService) {
-  }
-
-  signupUser() {
-
   }
 
 }
