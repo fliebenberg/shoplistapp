@@ -60,7 +60,13 @@ export class UserLoginComponent implements OnInit {
 
   loginGoogleUser() {
     console.log('Logging in user with Google');
-    this.authService.logInGoogle().then(() => {
+    this.authService.logInGoogle().then((userCredential) => {
+      console.log('Google successful log in.');
+      console.log('PhotoURL before:' + this.authService.currentUser.photoUrl);
+      this.authService.currentUser.photoUrl = userCredential.additionalUserInfo.profile.picture;
+      console.log('PhotoURL after:' + this.authService.currentUser.photoUrl);
+      console.log(userCredential);
+      console.log(this.authService.currentUser.providerData);
       this.errorMsg = '';
       console.log('Google logged in.', this.newProviderCredential);
       if (this.newProviderCredential) {
@@ -76,8 +82,19 @@ export class UserLoginComponent implements OnInit {
 
   loginFacebookUser() {
     console.log('Logging in user with Facebook');
-    this.authService.logInFacebook().then(() => {
+    this.authService.logInFacebook().then((userCredential) => {
       console.log('Facebook successful log in.');
+      console.log('PhotoURL before:' + this.authService.currentUser.photoUrl);
+      this.authService.currentUser.providerData.forEach(provider => {
+        console.log('Provider: ', provider);
+        if (provider.providerId === 'facebook.com') {
+          console.log('Found facebook');
+          this.authService.currentUser.photoUrl = provider.photoURL;
+        }
+      });
+      console.log('PhotoURL after:' + this.authService.currentUser.photoUrl);
+      console.log(userCredential);
+      console.log(this.authService.currentUser.providerData);
       this.errorMsg = '';
       if (this.newProviderCredential) {
         this.linkNewProvider();

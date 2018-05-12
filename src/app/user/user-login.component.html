@@ -1,6 +1,6 @@
-<div class='container'>
-  <h4 *ngIf = 'errorMsg.length > 0' class='alert alert-danger'>{{errorMsg}}</h4>
+<div class=''>
   <h2 class='text-center'>Sign in</h2>
+  <h4 *ngIf = 'errorMsg.length > 0' class='alert alert-danger'>{{errorMsg}}</h4>
   <button class='btn btn-block' *ngIf='showGoogle' (click)="loginGoogleUser()">
     <i class='fab fa-google'></i>
     Sign in with Google
@@ -38,15 +38,15 @@
       </form>
     </div>
   </div>
-  <br>
+  <div *ngIf='loginWithDifferentEmailFlag'>
+    <br>
+    <button (click)='loginWithDifferentEmail();loginForm.resetForm()' 
+      class='btn btn-warning'>
+      Sign in with a different email.
+    </button>
+  </div>
+  <h2 class="text-center">Sign Up</h2>
   <button class='btn btn-block btn-warning' routerLink='/signup'>
     Sign Up for a new account
   </button>
-  <p>{{userEmail}} | {{userPassword}} | {{loginForm.valid}} | {{loginForm.pristine}}</p>
-  <br>
-  <button *ngIf='loginWithDifferentEmailFlag' (click)='loginWithDifferentEmail();loginForm.resetForm()' 
-          class='btn btn-warning'>
-    Sign in with a different email.
-  </button>
-  <br>
 </div>

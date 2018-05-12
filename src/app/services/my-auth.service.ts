@@ -48,6 +48,7 @@ export class MyAuthService {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(
       credential => {
         this.authState = credential.user;
+        return credential;
       }
     );
   }
@@ -64,16 +65,17 @@ export class MyAuthService {
     return this.socialLogin(provider);
    }
 
-  logInTwitter() {
-    console.log ("Logging in with Twitter...");
-    const provider = new firebase.auth.TwitterAuthProvider();
-    return this.socialLogin(provider);
-   }
+  // logInTwitter() {
+  //   console.log ("Logging in with Twitter...");
+  //   const provider = new firebase.auth.TwitterAuthProvider();
+  //   return this.socialLogin(provider);
+  //  }
 
   private socialLogin(provider) {
     return this.afAuth.auth.signInWithPopup(provider).then(
       credential => {
         this.authState = credential.user;
+        return credential;
       });
   }
 
