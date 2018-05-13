@@ -1,6 +1,6 @@
 <div class=''>
   <h2 class='text-center'>{{signUp?'Sign Up':'Sign in'}}</h2>
-  <h4 *ngIf = 'errorMsg.length > 0' class='alert alert-danger text-center'>{{errorMsg}}</h4>
+  <h4 *ngIf = 'errorMsg.length > 0' class='alert alert-danger text-center' [innerHtml] = 'errorMsg'></h4>
   <div class="row">
     <div class="col-12 col-sm-6">
       <button class='btn btn-block' *ngIf='showGoogle' (click)="loginGoogleUser()">
@@ -22,15 +22,19 @@
         <div class='form-group' [hidden] = '!signUp'>
           <label for="name">Name</label>
           <input type="text" [required] = 'signUp' class='form-control'
-            [(ngModel)]='userName' #nameInput='ngModel'  
-            placeholder='Name' name='name'id='name'>
+            [(ngModel)]='userName' #nameInput='ngModel' 
+            [ngClass] = '{"border-danger": nameInput.invalid}' 
+            placeholder='Name (required)' name='name'id='name'>
           <div [hidden]='nameInput.valid || nameInput.pristine' class='alert alert-danger'>
             User name is required for sign-up
           </div>
         </div>
         <div class='form-group'>
           <label for="email">Email</label>
-          <input type="email" required [(ngModel)]='userEmail' #emailInput='ngModel' class='form-control' placeholder='Email' name='email'
+          <input type="email" required 
+            [(ngModel)]='userEmail' #emailInput='ngModel' class='form-control'
+            [ngClass] = '{"border-danger": emailInput.invalid}' 
+            placeholder='Email (required)' name='email'
           id='email'>
           <div [hidden]='emailInput.valid || emailInput.pristine' class='alert alert-danger'>
             Email is required
@@ -38,7 +42,10 @@
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" required [(ngModel)]='userPassword' #passwordInput='ngModel' class='form-control' placeholder='Password'
+          <input type="password" required 
+            [(ngModel)]='userPassword' #passwordInput='ngModel' class='form-control' 
+            [ngClass] = '{"border-danger": passwordInput.invalid}'
+            placeholder='Password (required)'
             name="password" id="password">
           <div [hidden]='passwordInput.valid || passwordInput.pristine' class='alert alert-danger'>
             Password is required

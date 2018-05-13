@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MyAuthService } from '../services/my-auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-login',
@@ -23,8 +24,19 @@ export class UserLoginComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe((data: {signUp: boolean}) => {
       this.signUp = data.signUp;
-    })
+    });
     this.initialiseVars();
+    if (this.route.snapshot.params['email']) {
+      this.userEmail = this.route.snapshot.params['email'];
+      this.authService.afAuth.auth.fetchSignInMethodsForEmail(this.userEmail).then((providers: string[]) => {
+        if (providers.length > 0) {
+          this.checkProviders(providers);
+        }
+      });
+    }
+    if (this.route.snapshot.params['errorMsg']) {
+      this.errorMsg = this.route.snapshot.params['errorMsg'];
+    }
   }
 
   initialiseVars() {
@@ -135,7 +147,14 @@ export class UserLoginComponent implements OnInit {
     console.log('Error caught in handler: ' + error.code, error);
     switch (error.code) {
       case 'auth/email-already-in-use': {
-        this.errorMsg = 'The email ' + email + ' is already in use. You can "Sign In" with this email or "Sign Up" using a different email.';
+        if (email) {
+          this.authService.afAuth.auth.fetchSignInMethodsForEmail(email).then((providers: string[]) => {
+            if (providers.length > 0) {
+              this.errorMsg = 'The email ' + email + ' is already in use. You can Sign in using one of the methods below or "Sign Up" using a different email.';
+              this.router.navigate(['login', {email: email, errorMsg: this.errorMsg}]);
+            };
+          });
+        }
         break;
       }
       case "auth/user-not-found": {
@@ -187,6 +206,7 @@ export class UserLoginComponent implements OnInit {
         this.errorMsg = 'An unidentified error has occured: ' + error.code;
       }
     }
+    // this.errorMsg = this.sanitizer.bypassSecurityTrustHtml(this.errorMsg).toString();
   }
 
   checkProviders(providers: string[]) {
