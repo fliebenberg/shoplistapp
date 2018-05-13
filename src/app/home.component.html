@@ -3,7 +3,7 @@
     Welcome to ShopList{{authService.currentUser?' '+authService.currentUser.displayName:''}}!
   </h3>
   <img class='rounded-circle img-thumbnail w-25 mx-auto d-block' 
-    *ngIf='authService.currentUser' 
+    *ngIf='authService.currentUser && authService.currentUser.photoUrl' 
     src={{authService.currentUser.photoURL}} alt='User profile picture'>
   <h4 class='text-center col-12'>The best Shopping List app on the web.</h4>
   <br>

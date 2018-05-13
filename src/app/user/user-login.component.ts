@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MyAuthService } from '../services/my-auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-login',
-  templateUrl: './user-login.component.html',
-  styleUrls: ['./user-login.component.css']
+  templateUrl: './user-login.component.html'
 })
 export class UserLoginComponent implements OnInit {
   userEmail: string;
@@ -13,14 +12,18 @@ export class UserLoginComponent implements OnInit {
   errorMsg = '';
   loginWithDifferentEmailFlag = false;
   newProviderCredential = null;
+  signUp = false;
+  showNameInput = false;
   showGoogle = true;
   showFacebook = true;
-  showTwitter = true;
   showEmailPassword = true;
 
-  constructor(public authService: MyAuthService, public router: Router) { }
+  constructor(public authService: MyAuthService, public router: Router, public route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.data.subscribe((data: {signUp: boolean}) => {
+      this.signUp = data.signUp;
+    })
     this.initialiseVars();
   }
 
@@ -30,18 +33,29 @@ export class UserLoginComponent implements OnInit {
     this.errorMsg = '';
     this.loginWithDifferentEmailFlag = false;
     this.newProviderCredential = null;
+    this.showNameInput = false;
     this.showGoogle = true;
     this.showFacebook = true;
     this.showEmailPassword = true;
   }
 
-  signupEmailPassword(email: string, password: string) {
-    console.log('Sign up user with email and password');
+  signupUser() {
+    this.showNameInput = true;
+  }
+
+  signupEmailPassword(name: string, email: string, password: string) {
+    console.log('Signing up new user with email and password');
     this.authService.signupEmailPassword(email, password).then(() => {
       this.errorMsg = '';
-      this.router.navigate(['']);
-    }).catch((error) => {
-      this.handleError(error, email);
+      this.authService.currentUser.updateProfile({displayName: name}).then(() => {
+        console.log('Successfully set user displayname to ' + this.authService.currentUser.displayName);
+      }).catch((error) => {
+        console.log('Error: Could not set user displayName', error);
+      });
+      this.router.navigate(['/']);
+    }).catch(error => {
+      console.log('Error: ' + error.code, error);
+      this.handleError(error, email, password);
     });
   }
 
@@ -120,6 +134,10 @@ export class UserLoginComponent implements OnInit {
   handleError(error, email?: string, password?: string) {
     console.log('Error caught in handler: ' + error.code, error);
     switch (error.code) {
+      case 'auth/email-already-in-use': {
+        this.errorMsg = 'The email ' + email + ' is already in use. You can "Sign In" with this email or "Sign Up" using a different email.';
+        break;
+      }
       case "auth/user-not-found": {
         this.errorMsg = 'Email ' + email + ' is unknown. Please "Sign Up" for a new account.';
         break;

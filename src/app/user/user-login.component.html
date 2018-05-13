@@ -1,20 +1,33 @@
 <div class=''>
-  <h2 class='text-center'>Sign in</h2>
-  <h4 *ngIf = 'errorMsg.length > 0' class='alert alert-danger'>{{errorMsg}}</h4>
-  <button class='btn btn-block' *ngIf='showGoogle' (click)="loginGoogleUser()">
-    <i class='fab fa-google'></i>
-    Sign in with Google
-  </button>
-  <br>
-  <button class='btn btn-block' *ngIf='showFacebook' (click)="loginFacebookUser()">
-    <i class='fab fa-facebook'></i>
-    Sign in with Facebook
-  </button>
+  <h2 class='text-center'>{{signUp?'Sign Up':'Sign in'}}</h2>
+  <h4 *ngIf = 'errorMsg.length > 0' class='alert alert-danger text-center'>{{errorMsg}}</h4>
+  <div class="row">
+    <div class="col-12 col-sm-6">
+      <button class='btn btn-block' *ngIf='showGoogle' (click)="loginGoogleUser()">
+        <i class='fab fa-google'></i>
+        {{signUp?'Sign Up':'Sign in'}} with Google
+      </button>
+    </div>
+    <div class="col-12 col-sm-6 mt-2 mt-sm-0">
+      <button class='btn btn-block' *ngIf='showFacebook' (click)="loginFacebookUser()">
+        <i class='fab fa-facebook'></i>
+        {{signUp?'Sign Up':'Sign in'}} with Facebook
+      </button>
+    </div>
+  </div>
   <br>
   <div [hidden] = '!showEmailPassword' class='card'>
     <div class='card-body'>
       <form #loginForm='ngForm'>
-        <!-- <h3>Sign in with email and password</h3> -->
+        <div class='form-group' [hidden] = '!signUp'>
+          <label for="name">Name</label>
+          <input type="text" [required] = 'signUp' class='form-control'
+            [(ngModel)]='userName' #nameInput='ngModel'  
+            placeholder='Name' name='name'id='name'>
+          <div [hidden]='nameInput.valid || nameInput.pristine' class='alert alert-danger'>
+            User name is required for sign-up
+          </div>
+        </div>
         <div class='form-group'>
           <label for="email">Email</label>
           <input type="email" required [(ngModel)]='userEmail' #emailInput='ngModel' class='form-control' placeholder='Email' name='email'
@@ -31,9 +44,13 @@
             Password is required
           </div>
         </div>
-        <button [disabled]='loginForm.invalid || loginForm.pristine' (click)='loginEmailPassword(userEmail,userPassword)' 
+        <button *ngIf = '!signUp' [disabled]='(showNameInput && nameInput.invalid) || loginForm.invalid ||loginForm.pristine' (click)='loginEmailPassword(userEmail, userPassword)' 
           class='btn btn-block btn-success'>
           Sign in with email and password
+        </button>
+        <button *ngIf = 'signUp' [disabled]='(showNameInput && nameInput.invalid) || loginForm.invalid ||loginForm.pristine' (click)='signupEmailPassword(userName, userEmail, userPassword)' 
+          class='btn btn-block btn-success'>
+          Sign up with email and password
         </button>
       </form>
     </div>
@@ -45,8 +62,11 @@
       Sign in with a different email.
     </button>
   </div>
-  <h2 class="text-center">Sign Up</h2>
-  <button class='btn btn-block btn-warning' routerLink='/signup'>
+  <h2 class="text-center">{{signUp?'Sign In':'Sign Up'}}</h2>
+  <button *ngIf= '!signUp' class='btn btn-block btn-warning' (click)="router.navigate(['signup'])">
     Sign Up for a new account
+  </button>
+  <button *ngIf= 'signUp' class='btn btn-block btn-warning' (click)="router.navigate(['login'])">
+    Sign In with an existing account
   </button>
 </div>

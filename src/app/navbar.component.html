@@ -10,7 +10,7 @@
     </div>
     <div class='navbar-nav ml-auto mx-1 pt-1 align-items-center flow-row'>
       <img class='rounded-circle mx-2' style='height: 40px'
-        *ngIf='authService.currentUser' 
+        *ngIf='authService.currentUser && authService.currentUser.photoURL' 
         src={{authService.currentUser.photoURL}} alt='User profile picture'>
       <div class='navbar-nav d-none d-md-block text-center px-1' *ngIf='authService.authenticated'>
         <div>

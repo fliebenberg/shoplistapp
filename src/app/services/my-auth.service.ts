@@ -38,7 +38,10 @@ export class MyAuthService {
     console.log('Registering user with email and password...');
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password).then(
       credential => {
-        this.authState = credential.user;
+        console.log('New user registered: ', credential);
+        this.authState = credential;
+        return credential;
+
       }
     );
   }
@@ -47,6 +50,7 @@ export class MyAuthService {
     console.log ('Logging in with Email and Password...');
     return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(
       credential => {
+        console.log(credential);
         this.authState = credential.user;
         return credential;
       }
