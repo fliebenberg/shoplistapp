@@ -10,7 +10,8 @@ export const environment = {
     databaseURL: "https://shoppinglist-app-c23b8.firebaseio.com",
     projectId: "shoppinglist-app-c23b8",
     storageBucket: "shoppinglist-app-c23b8.appspot.com",
-    messagingSenderId: "519180679210"
+    messagingSenderId: "519180679210",
+    timestampsInSnapshots: 'true'
   }
 };
 

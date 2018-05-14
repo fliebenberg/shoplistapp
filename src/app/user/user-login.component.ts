@@ -152,7 +152,7 @@ export class UserLoginComponent implements OnInit {
             if (providers.length > 0) {
               this.errorMsg = 'The email ' + email + ' is already in use. You can Sign in using one of the methods below or "Sign Up" using a different email.';
               this.router.navigate(['login', {email: email, errorMsg: this.errorMsg}]);
-            };
+            }
           });
         }
         break;
