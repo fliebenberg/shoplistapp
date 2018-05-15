@@ -13,6 +13,7 @@ import { UserLoginComponent } from './user/user-login.component';
 import { HomeComponent } from './home.component';
 import { NavbarComponent } from './navbar.component';
 import { ItemListComponent } from './items/item-list.component';
+import { ItemAddComponent } from './items/item-add.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ItemListComponent } from './items/item-list.component';
     HomeComponent,
     NavbarComponent,
     ItemListComponent,
+    ItemAddComponent,
   ],
   imports: [
     BrowserModule,

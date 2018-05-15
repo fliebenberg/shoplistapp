@@ -1,8 +1,9 @@
-<p>
-  item-list works!
-</p>
+<button class="btn btn-success" (click)= 'addItem()'>Add item</button>
+<br>
+<h2 class='text-center'>Item List</h2>
 <ul>
-  <li *ngFor='let item of items'>
+  <li *ngIf='!($items | async)'>Loading items...</li>
+  <li *ngFor='let item of $items | async'>
     {{item.name}}
   </li>
 </ul>

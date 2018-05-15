@@ -1,0 +1,27 @@
+<p>
+  item-add works!
+</p>
+<form #itemForm = 'ngForm'>
+  <div class='form-group'>
+      <label for="name">Name</label>
+      <input type="text" required class='form-control'
+        [(ngModel)]='itemName' #nameInput='ngModel' 
+        [ngClass] = '{"border-danger": nameInput.invalid}' 
+        placeholder='Name (required)' name='name'id='name'>
+      <div [hidden]='nameInput.valid || nameInput.pristine' class='alert alert-danger'>
+        Item name is required
+      </div>
+    </div>
+  <div class='form-group'>
+      <label for="category">Category</label>
+      <input type="text" required class='form-control'
+        [(ngModel)]='itemCategory' #categoryInput='ngModel' 
+        [ngClass] = '{"border-danger": categoryInput.invalid}' 
+        placeholder='Category (required)' name='category'id='category'>
+      <div [hidden]='categoryInput.valid || categoryInput.pristine' class='alert alert-danger'>
+        Item category is required
+      </div>
+    </div>
+</form>
+<button class="btn btn-success" [disabled]='itemForm.invalid' (click)='addItem(itemName, itemCategory)'>Add Item</button>
+<button class="btn btn-danger" (click)='cancel()'>Cancel</button>
