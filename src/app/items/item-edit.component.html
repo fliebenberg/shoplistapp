@@ -1,11 +1,9 @@
-<p>
-  item-add works!
-</p>
+<h2 class="text-center">Item Edit</h2>
 <form #itemForm = 'ngForm'>
   <div class='form-group'>
       <label for="name">Name</label>
       <input type="text" required class='form-control'
-        [(ngModel)]='itemName' #nameInput='ngModel' 
+        [(ngModel)]='item.name' #nameInput='ngModel' 
         [ngClass] = '{"border-danger": nameInput.invalid}' 
         placeholder='Name (required)' name='name'id='name'>
       <div [hidden]='nameInput.valid || nameInput.pristine' class='alert alert-danger'>
@@ -15,7 +13,7 @@
   <div class='form-group'>
       <label for="category">Category</label>
       <input type="text" required class='form-control'
-        [(ngModel)]='itemCategory' #categoryInput='ngModel' 
+        [(ngModel)]='item.category' #categoryInput='ngModel' 
         [ngClass] = '{"border-danger": categoryInput.invalid}' 
         placeholder='Category (required)' name='category'id='category'>
       <div [hidden]='categoryInput.valid || categoryInput.pristine' class='alert alert-danger'>
@@ -23,5 +21,17 @@
       </div>
     </div>
 </form>
-<button class="btn btn-success" [disabled]='itemForm.invalid' (click)='addItem(itemName, itemCategory)'>Add Item</button>
-<button class="btn btn-danger" (click)='cancel()'>Cancel</button>
+<div class="row justify-content-between">
+  <button class="btn btn-success col-6 float-left" 
+    *ngIf='!itemForm.pristine' [disabled]='itemForm.invalid' 
+    (click)='saveItem()'>
+    Save Item
+  </button>
+  <button class="btn btn-danger" *ngIf='id' [disabled]='itemForm.invalid' 
+    (click)='deleteItem()'>
+    Delete Item
+  </button>
+  <button class="btn btn-warning" (click)='cancel()'>
+    Cancel
+  </button>
+</div>

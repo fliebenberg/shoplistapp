@@ -13,7 +13,9 @@ import { UserLoginComponent } from './user/user-login.component';
 import { HomeComponent } from './home.component';
 import { NavbarComponent } from './navbar.component';
 import { ItemListComponent } from './items/item-list.component';
-import { ItemAddComponent } from './items/item-add.component';
+import { ItemEditComponent } from './items/item-edit.component';
+import { PageNotFoundComponent } from './page-not-found.component';
+import { ItemViewComponent } from './items/item-view.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { ItemAddComponent } from './items/item-add.component';
     HomeComponent,
     NavbarComponent,
     ItemListComponent,
-    ItemAddComponent,
+    ItemEditComponent,
+    PageNotFoundComponent,
+    ItemViewComponent,
   ],
   imports: [
     BrowserModule,

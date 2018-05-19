@@ -26,7 +26,7 @@ export class UserLoginComponent implements OnInit {
       this.signUp = data.signUp;
     });
     this.initialiseVars();
-    if (this.route.snapshot.params['email']) {
+    if (this.route.snapshot.paramMap['email']) {
       this.userEmail = this.route.snapshot.params['email'];
       this.authService.afAuth.auth.fetchSignInMethodsForEmail(this.userEmail).then((providers: string[]) => {
         if (providers.length > 0) {

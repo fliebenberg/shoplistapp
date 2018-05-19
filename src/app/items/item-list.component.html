@@ -1,9 +1,18 @@
 <button class="btn btn-success" (click)= 'addItem()'>Add item</button>
 <br>
 <h2 class='text-center'>Item List</h2>
-<ul>
-  <li *ngIf='!($items | async)'>Loading items...</li>
-  <li *ngFor='let item of $items | async'>
-    {{item.name}}
-  </li>
-</ul>
+<h4 class='' *ngIf='!items'>Loading items...</h4>
+<div class='list-group'>
+  <div class='list-group-item list-group-item-action py-1' 
+    *ngFor='let item of items'
+    routerLink='/item/{{item.id}}'>
+    <span class=''>
+      {{item.name}}
+    </span>
+    <div class="btn-group btn-group-sm float-right">
+      <button class='btn btn-success' routerLink='/item/{{item.id}}/edit'>
+        <i class='fas fa-pencil-alt'></i>
+      </button>
+    </div>
+  </div>
+</div>
