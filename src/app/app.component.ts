@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MyAuthService } from './services/my-auth.service';
-import { MyMessageService, Message } from './services/my-message.service';
+import { MyMessageService, Message, MessageType } from './services/my-message.service';
+import { MyItemsService } from './services/my-items.service';
 
 @Component({
   selector: 'app-root',
@@ -10,14 +11,19 @@ import { MyMessageService, Message } from './services/my-message.service';
 export class AppComponent {
   title = "Shop List";
   messages: Message[] = [];
+  messageType = MessageType;
 
-  constructor(public authService: MyAuthService, public messageService: MyMessageService) {
+  constructor(
+    public authService: MyAuthService,
+    public messageService: MyMessageService,
+    public itemsService: MyItemsService
+  ) {
     this.messageService.$messages.subscribe((messages: Message[]) => {
       this.messages = messages;
     });
   }
 
-  addMessage() {
-    this.messageService.addMessage('Test Message', 'success', 10000);
+  addMessage(type: MessageType) {
+    this.messageService.addMessage('Test Message', type);
   }
 }

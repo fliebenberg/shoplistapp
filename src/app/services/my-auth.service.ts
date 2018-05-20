@@ -4,6 +4,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { MyMessageService, MessageType } from './my-message.service';
 
 
 @Injectable({
@@ -13,7 +14,12 @@ export class MyAuthService {
   authState: any = null;
   $authState: Observable<any>;
 
-  constructor(public app: FirebaseApp, public afAuth: AngularFireAuth, public router: Router) {
+  constructor(
+    public app: FirebaseApp, 
+    public afAuth: AngularFireAuth, 
+    public router: Router, 
+    public messageService: MyMessageService
+  ) {
     this.afAuth.authState.subscribe(auth => {
       this.authState = auth;
     });
@@ -39,6 +45,7 @@ export class MyAuthService {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password).then(
       credential => {
         console.log('New user registered: ', credential);
+        this.messageService.addMessage('New user registered', MessageType.success);
         this.authState = credential;
         return credential;
 
@@ -86,6 +93,7 @@ export class MyAuthService {
   logOut(route?: string) {
     this.afAuth.auth.signOut().then(() => {
       if (route) { this.router.navigate([route]); }
+      this.messageService.addMessage('User succesfully logged out.', MessageType.info);
     });
   }
 }

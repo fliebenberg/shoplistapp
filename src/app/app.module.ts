@@ -16,6 +16,7 @@ import { ItemListComponent } from './items/item-list.component';
 import { ItemEditComponent } from './items/item-edit.component';
 import { PageNotFoundComponent } from './page-not-found.component';
 import { ItemViewComponent } from './items/item-view.component';
+import { MessageToastComponent } from './message-toast.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ItemViewComponent } from './items/item-view.component';
     ItemEditComponent,
     PageNotFoundComponent,
     ItemViewComponent,
+    MessageToastComponent,
   ],
   imports: [
     BrowserModule,

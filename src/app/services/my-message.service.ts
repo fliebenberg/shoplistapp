@@ -1,10 +1,14 @@
 import { Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
+export enum MessageType {
+  success, error, info
+}
+
 export interface Message {
   id: number;
   text: string;
-  type: string;
+  type: MessageType;
   time: number;
 }
 
@@ -22,10 +26,11 @@ export class MyMessageService {
     return this.messagesSubject.asObservable();
   }
 
-  addMessage(text: string, type: string, time: number = 1000) {
+  addMessage(text: string, type: MessageType, time: number = 5000) {
     this.id ++;
     this.messages.push({id: this.id, text: text, type: type, time: time});
     console.log('Message added for ' + (time / 1000).toFixed(0) + ' seconds: ' + this.id + ' | ' + text);
+    console.log('Message Type: ' + type);
     this.messagesSubject.next(this.messages);
     this.deleteMessage(this.id, time);
   }

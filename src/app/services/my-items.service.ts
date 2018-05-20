@@ -20,6 +20,7 @@ export class MyItemsService {
     this.$items = this.itemsCollection.valueChanges();
     this.$items.subscribe(items => {
       this.items = items;
+      console.log('Items loaded...');
     });
   }
 

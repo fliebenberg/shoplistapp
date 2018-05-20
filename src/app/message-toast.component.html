@@ -1,0 +1,7 @@
+<div class='fixed-bottom mb-3 d-flex flex-column'>
+    <div *ngFor='let message of messages' class='{{msgClass(message)}} d-flex mx-auto rounded py-1'>
+      <div class='text-center px-4'>
+        {{message.text}} | {{message.id}}
+      </div>
+    </div>
+</div>
