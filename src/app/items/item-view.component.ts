@@ -3,6 +3,7 @@ import { Router,  ActivatedRoute } from '@angular/router';
 
 import { MyItemsService } from '../services/my-items.service';
 import { Item } from './item.model';
+import { MyMessageService, MessageType } from './../services/my-message.service';
 
 @Component({
   selector: 'app-item-view',
@@ -11,16 +12,19 @@ import { Item } from './item.model';
 export class ItemViewComponent implements OnInit {
   item: Item;
   id: string;
-  
-  constructor(public itemsService: MyItemsService, public router: Router, public route: ActivatedRoute) { }
+
+  constructor(
+    public itemsService: MyItemsService,
+    public router: Router,
+    public route: ActivatedRoute,
+    public messageService: MyMessageService
+  ) { }
 
   ngOnInit() {
     if (!this.itemsService.items) {
       this.router.navigate(['/items']);
     } else {
       this.item = new Item();
-      console.log('Empty item assigned');
-      console.log(this.route.snapshot);
       this.route.paramMap.subscribe(params => {
         this.id = params.get('id');
         if (this.id) {
@@ -28,6 +32,7 @@ export class ItemViewComponent implements OnInit {
             this.item = this.itemsService.getItem(this.id);
           } else {
             console.log('Item id ' + this.id + 'does not exist');
+            this.messageService.addMessage('Could not find item with id ' + this.id + '.', MessageType.error, 10000);
           }
         }
       });

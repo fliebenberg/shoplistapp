@@ -18,6 +18,10 @@ import { ItemEditComponent } from './items/item-edit.component';
 import { PageNotFoundComponent } from './page-not-found.component';
 import { ItemViewComponent } from './items/item-view.component';
 import { MessageToastComponent } from './message-toast.component';
+import { ItemFiltersComponent } from './items/item-filters.component';
+import { CategoriesFilterComponent } from './items/filters/categories-filter.component';
+import { ProvidersFilterComponent } from './items/filters/providers-filter.component';
+import { BrandsFilterComponent } from './items/filters/brands-filter.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +35,10 @@ import { MessageToastComponent } from './message-toast.component';
     PageNotFoundComponent,
     ItemViewComponent,
     MessageToastComponent,
+    ItemFiltersComponent,
+    CategoriesFilterComponent,
+    ProvidersFilterComponent,
+    BrandsFilterComponent,
   ],
   imports: [
     BrowserModule,

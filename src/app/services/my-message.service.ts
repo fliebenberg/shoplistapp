@@ -22,7 +22,7 @@ export class MyMessageService {
 
   constructor() {}
 
-  get $messages() {
+  get $messages(): Observable<Message[]> {
     return this.messagesSubject.asObservable();
   }
 

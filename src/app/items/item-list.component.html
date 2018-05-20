@@ -1,5 +1,27 @@
 <button class="btn btn-success btn-block" (click)= 'addItem()'>Add item</button>
 <br>
+<form #searchForm = 'ngForm'>
+  <div class='row d-flex-inline'>
+    <div class="col-10 pr-0 mr-0">
+       <input class='form-control' type="text"
+        [(ngModel)] = 'searchText' #searchInput = 'ngModel'
+        placeholder='Search text' id='searchInput' name='searchInput'
+        (input) = 'applyFilter(searchInput.value)'
+       >
+    </div>
+    <div class="col-2 pl-0 ml-0">
+      <button type="button" class='btn btn-secondary btn-block text-white' routerLink='/items/filters'>
+        <i class='fas fa-filter'></i><span class='d-none d-md-inline'> Filters</span>
+      </button>
+    </div>
+    <!-- <div class="input-group-prepend">
+      <span class="input-group-text">Search</span> 
+      <button class='btn btn-secondary' type="button">
+        <i class='fas fa-search'></i>
+      </button>
+    </div> -->
+  </div>
+</form>
 <h2 class='text-center'>Item List</h2>
 <h4 class='' *ngIf='!items'>Loading items...</h4>
 <div class='list-group'>
