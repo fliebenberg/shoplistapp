@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { MyAuthService } from './services/my-auth.service';
 
 @Component({
@@ -13,5 +13,4 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

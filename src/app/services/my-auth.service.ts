@@ -15,9 +15,9 @@ export class MyAuthService {
   $authState: Observable<any>;
 
   constructor(
-    public app: FirebaseApp, 
-    public afAuth: AngularFireAuth, 
-    public router: Router, 
+    public app: FirebaseApp,
+    public afAuth: AngularFireAuth,
+    public router: Router,
     public messageService: MyMessageService
   ) {
     this.afAuth.authState.subscribe(auth => {

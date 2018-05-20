@@ -7,11 +7,13 @@ import { UserLoginComponent } from './user/user-login.component';
 import { ItemListComponent } from './items/item-list.component';
 import { ItemEditComponent } from './items/item-edit.component';
 import { ItemViewComponent } from './items/item-view.component';
+import { UserComponent } from './user/user.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent, pathMatch: 'full'},
   {path: 'login', component: UserLoginComponent},
   {path: 'signup', component: UserLoginComponent, data: {signUp: true}},
+  {path: 'user', component: UserComponent},
   {path: 'items', component: ItemListComponent},
   {path: 'items/add', component: ItemEditComponent},
   {path: 'item/:id', component: ItemViewComponent},

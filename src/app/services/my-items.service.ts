@@ -12,7 +12,7 @@ export class MyItemsService {
   $items: Observable<any[]>;
   itemsCollection: AngularFirestoreCollection<Item>;
 
-  constructor(public afStore: AngularFirestore) { 
+  constructor(public afStore: AngularFirestore) {
     // needed to set this to take account of changes in firestore
     this.afStore.firestore.settings({timestampsInSnapshots: true});
 
@@ -24,23 +24,10 @@ export class MyItemsService {
     });
   }
 
-  // get itemsLoaded(): boolean {
-  //   if (this.items) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-  // addItem(item: Item) {
-  //   const id = this.afStore.createId();
-  //   item.id = id;
-  //   this.itemsCollection.doc(id).set(item);
-  // }
-
   getItem(itemId: string): Item {
     let foundItem = null;
     if (this.items) {
-      foundItem = Object.assign({},this.items.find(item => item.id === itemId));
+      foundItem = Object.assign({}, this.items.find(item => item.id === itemId));
     } else {
       console.log('Error: Items not loaded');
     }

@@ -10,6 +10,7 @@ import { AppRoutingModule } from './/app-routing.module';
 
 import { AppComponent } from './app.component';
 import { UserLoginComponent } from './user/user-login.component';
+import { UserComponent } from './user/user.component';
 import { HomeComponent } from './home.component';
 import { NavbarComponent } from './navbar.component';
 import { ItemListComponent } from './items/item-list.component';
@@ -22,6 +23,7 @@ import { MessageToastComponent } from './message-toast.component';
   declarations: [
     AppComponent,
     UserLoginComponent,
+    UserComponent,
     HomeComponent,
     NavbarComponent,
     ItemListComponent,
