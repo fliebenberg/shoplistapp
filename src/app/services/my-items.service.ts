@@ -14,7 +14,7 @@ export class MyItemsService {
 
   filteredItems: Item[] = [];
   filteredItemsSubject = new Subject<Item[]>();
-  categories: string[] = [];
+  categoriesMap = new Map();
   filters = {
     searchFilter: '',
     categoryFilter: ['']
@@ -30,7 +30,7 @@ export class MyItemsService {
       this.items = items;
       this.filteredItems = this.searchItems('', items);
       this.filteredItemsSubject.next(this.filteredItems);
-      this.categories = this.updateCategpries();
+      this.updateCategories();
       console.log('Items loaded...');
     });
   }
@@ -73,14 +73,22 @@ export class MyItemsService {
     }
   }
 
-  updateCategpries() {
-    const newCategories = [];
+  updateCategories(): void {
+    const tempCategories = [];
     this.items.map(item => {
-      if (!newCategories.includes(item.category)) {
-        newCategories.push(item.category);
+      if (!tempCategories.includes(item.category)) {
+        tempCategories.push(item.category);
         console.log('Added category: ' + item.category);
       }
     });
-    return newCategories.sort();
+    const tempCategoriesMap = new Map();
+    tempCategories.sort().forEach(category => {
+      tempCategoriesMap.set(category, true);
+    });
+    this.categoriesMap = tempCategoriesMap;
+  }
+
+  get categories(): string[] {
+    return Array.from(this.categoriesMap.keys());
   }
 }

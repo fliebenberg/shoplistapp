@@ -1,7 +1,31 @@
-<p>
-  categories-filter works!
-</p>
-<ul class="list-group">
-  <li class="list-group-item" *ngFor='let category of itemService.categories'>{{category}}</li>
-</ul>
-<p>End</p>
+<form #categoriesFilterForm = 'ngForm'>
+  <div class="row d-flex-inline">
+    <div class="col-10 col-sm-11 mr-0 pr-0">
+      <input type="text" class="form-control" 
+          [(ngModel)]= 'categorySearch' #categoriesFilterInput = 'ngModel'
+          placeHolder='Search categories' id='categoriesFilterInput' name='categoriesFilterInput'
+      >
+    </div>
+    <div class="col-2 col-sm-1 ml-0 pl-0">
+      <button type='reset' class='btn btn-block' (click)='categoriesFilterInput.value=""'>X</button>
+    </div>
+  </div>
+</form>
+
+<button class="p-2 col-sm-6 col-md-4 col-lg-3 col-12 text-left" 
+    *ngFor='let category of searchCategories(categoriesFilterInput.value,itemService.categories)'
+    (click)='itemService.categoriesMap.set(category, !itemService.categoriesMap.get(category))'
+>
+  <div class='' *ngIf='itemService.categoriesMap.get(category)'>
+    <span class=''>{{category}}</span>
+    <div class="float-right">
+      <i class='fas fa-minus-circle' style='color: red'></i>
+    </div>
+  </div>
+  <div class='' *ngIf='!itemService.categoriesMap.get(category)'>
+    <del>{{category}}</del>
+    <div class='float-right'>
+      <i class='fas fa-plus-circle' style='color: green'></i>
+    </div>
+  </div>
+</button>
