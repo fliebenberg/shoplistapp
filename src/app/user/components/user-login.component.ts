@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MyAuthService } from '../services/my-auth.service';
+import { MyAuthService } from '../../services/my-auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 

@@ -2,8 +2,8 @@ import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { Item } from './item.model';
-import { MyItemsService } from '../services/my-items.service';
+import { Item } from '../item.model';
+import { MyItemsService } from '../../services/my-items.service';
 
 @Component({
   selector: 'app-item-list',

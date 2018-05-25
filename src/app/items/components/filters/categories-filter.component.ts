@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MyItemsService } from '../../services/my-items.service';
+import { MyItemsService } from '../../../services/my-items.service';
 
 @Component({
   selector: 'app-categories-filter',

@@ -3,8 +3,7 @@ import { Message, MessageType } from './services/my-message.service';
 
 @Component({
   selector: 'app-message-toast',
-  templateUrl: './message-toast.component.html',
-  styleUrls: ['./message-toast.component.css']
+  templateUrl: './message-toast.component.html'
 })
 export class MessageToastComponent implements OnInit {
   @Input() messages: Message[];

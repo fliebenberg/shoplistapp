@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router,  ActivatedRoute } from '@angular/router';
 
-import { MyItemsService } from '../services/my-items.service';
-import { Item } from './item.model';
-import { MyMessageService, MessageType } from './../services/my-message.service';
+import { MyItemsService } from '../../services/my-items.service';
+import { Item } from '../item.model';
+import { MyMessageService, MessageType } from '../../services/my-message.service';
 
 @Component({
   selector: 'app-item-view',
