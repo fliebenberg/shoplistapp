@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MyAuthService } from './services/my-auth.service';
-import { MyMessageService, Message, MessageType } from './services/my-message.service';
-import { MyItemsService } from './services/my-items.service';
+import { MyAuthService } from '../../services/my-auth.service';
+import { MyMessageService, Message, MessageType } from '../../services/my-message.service';
+import { MyItemsService } from '../../services/my-items.service';
 
 @Component({
   selector: 'app-root',

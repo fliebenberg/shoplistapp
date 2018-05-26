@@ -9,7 +9,7 @@ import { ItemViewComponent } from './components/item-view.component';
 import { BrandsFilterComponent } from './components/filters/brands-filter.component';
 import { CategoriesFilterComponent } from './components/filters/categories-filter.component';
 import { ProvidersFilterComponent } from './components/filters/providers-filter.component';
-import { AppRoutingModule } from '../app-routing.module';
+import { AppRoutingModule } from '../core/app-routing.module';
 
 @NgModule({
   imports: [

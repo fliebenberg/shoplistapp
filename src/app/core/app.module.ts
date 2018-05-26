@@ -5,16 +5,16 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 
-import { environment } from '../environments/environment';
-import { AppRoutingModule } from './/app-routing.module';
-import { UserModule } from './user/user.module';
-import { ItemsModule } from './items/items.module';
+import { environment } from '../../environments/environment';
+import { AppRoutingModule } from './app-routing.module';
+import { UserModule } from '../user/user.module';
+import { ItemsModule } from '../items/items.module';
 
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home.component';
-import { NavbarComponent } from './navbar.component';
-import { PageNotFoundComponent } from './page-not-found.component';
-import { MessageToastComponent } from './message-toast.component';
+import { AppComponent } from './components/app.component';
+import { HomeComponent } from './components/home.component';
+import { NavbarComponent } from './components/navbar.component';
+import { PageNotFoundComponent } from './components/page-not-found.component';
+import { MessageToastComponent } from './components/message-toast.component';
 
 @NgModule({
   declarations: [
