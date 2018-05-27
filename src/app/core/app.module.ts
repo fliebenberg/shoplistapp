@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { StoreModule } from '@ngrx/store';
 
 import { environment } from '../../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -15,6 +16,9 @@ import { HomeComponent } from './components/home.component';
 import { NavbarComponent } from './components/navbar.component';
 import { PageNotFoundComponent } from './components/page-not-found.component';
 import { MessageToastComponent } from './components/message-toast.component';
+import { itemsReducer } from '../items/reducers/items.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { ItemsEffects } from '../items/effects/items.effects';
 
 @NgModule({
   declarations: [
@@ -31,6 +35,8 @@ import { MessageToastComponent } from './components/message-toast.component';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AppRoutingModule,
+    StoreModule.forRoot({itemsState: itemsReducer}),
+    EffectsModule.forRoot([ItemsEffects]),
     UserModule,
     ItemsModule
   ],

@@ -26,17 +26,22 @@ export class MyItemsService {
 
     this.itemsCollection = this.afStore.collection('items');
     this.$items = this.itemsCollection.valueChanges();
-    this.$items.subscribe(items => {
-      this.items = items;
-      this.filteredItems = this.searchItems('', items);
-      this.filteredItemsSubject.next(this.filteredItems);
-      this.updateCategories();
-      console.log('Items loaded...');
-    });
+    // this.$items.subscribe(items => {
+    //   this.items = items;
+    //   this.filteredItems = this.searchItems('', items);
+    //   this.filteredItemsSubject.next(this.filteredItems);
+    //   this.updateCategories();
+    //   console.log('Items loaded...');
+    // });
   }
 
   get $filteredItems(): Observable<Item[]> {
     return this.filteredItemsSubject.asObservable();
+  }
+
+  getItems(): Observable<Item[]> {
+    console.log('[ItemsService] Called function getitems...');
+    return this.$items;
   }
 
   getItem(itemId: string): Item {
