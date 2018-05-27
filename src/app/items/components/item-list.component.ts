@@ -1,4 +1,4 @@
-import { State } from './../reducers/items.reducer';
+import { ItemsState } from './../reducers/items.reducer';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -13,10 +13,10 @@ import { MyItemsService } from '../../services/my-items.service';
 })
 export class ItemListComponent implements OnInit, OnDestroy {
   items: Item[];
-  $itemsState: Observable<State>;
+  $itemsState: Observable<ItemsState>;
   itemsSub: Subscription;
 
-  constructor(public itemsService: MyItemsService, public router: Router, public store: Store<State>) {
+  constructor(public itemsService: MyItemsService, public router: Router, public store: Store<ItemsState>) {
 
   }
 

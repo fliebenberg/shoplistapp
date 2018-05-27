@@ -5,7 +5,7 @@ import { MyMessageService, Message, MessageType } from '../../services/my-messag
 import { MyItemsService } from '../../services/my-items.service';
 import * as ItemsActions from '../../items/actions/items.actions';
 import { Store } from '@ngrx/store';
-import { State } from '../../items/reducers/items.reducer';
+import { ItemsState } from './../../items/reducers/items.reducer';
 
 @Component({
   selector: 'app-root',
@@ -16,13 +16,13 @@ export class AppComponent implements OnInit {
   title = "Shop List";
   messages: Message[] = [];
   messageType = MessageType;
-  itemsState: Observable<State>;
+  itemsState: Observable<ItemsState>;
 
   constructor(
     public authService: MyAuthService,
     public messageService: MyMessageService,
     public itemsService: MyItemsService,
-    public store: Store<State>
+    public store: Store<ItemsState>
   ) {
     this.messageService.$messages.subscribe((messages: Message[]) => {
       this.messages = messages;

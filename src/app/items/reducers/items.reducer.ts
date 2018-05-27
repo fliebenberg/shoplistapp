@@ -1,17 +1,17 @@
 import { Item } from './../item.model';
 import * as ItemsActions from './../actions/items.actions';
 
-export interface State {
+export interface ItemsState {
     loading: string;
     items: Item[];
 }
 
-export const initialState: State = {
+export const initialItemsState: ItemsState = {
     loading: 'not initialised',
     items: []
 };
 
-export function itemsReducer(state = initialState, action: ItemsActions.Actions): State {
+export function itemsReducer(state = initialItemsState, action: ItemsActions.Actions): ItemsState {
     switch (action.type) {
       case ItemsActions.LOAD_ITEMS: {
         console.log('[ItemsReducer] Load Items action called', state);
