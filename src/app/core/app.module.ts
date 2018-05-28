@@ -16,9 +16,9 @@ import { HomeComponent } from './components/home.component';
 import { NavbarComponent } from './components/navbar.component';
 import { PageNotFoundComponent } from './components/page-not-found.component';
 import { MessageToastComponent } from './components/message-toast.component';
-import { itemsReducer } from '../items/reducers/items.reducer';
+import { itemsReducer } from '../items/store/items.reducer';
 import { EffectsModule } from '@ngrx/effects';
-import { ItemsEffects } from '../items/effects/items.effects';
+import { ItemsEffects } from '../items/store/items.effects';
 
 @NgModule({
   declarations: [

@@ -1,5 +1,5 @@
-import { Item } from './../item.model';
-import * as ItemsActions from './../actions/items.actions';
+import { Item } from '../item.model';
+import * as ItemsActions from './items.actions';
 
 export interface ItemsState {
     loading: string;

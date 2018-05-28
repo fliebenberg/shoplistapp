@@ -1,11 +1,11 @@
-import { Item } from './../item.model';
-import { MyItemsService } from './../../services/my-items.service';
+import { Item } from '../item.model';
+import { MyItemsService } from '../../services/my-items.service';
 import { Action } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { tap, mergeMap, map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import * as ItemsActions from './../actions/items.actions';
+import * as ItemsActions from './items.actions';
 
 @Injectable()
 export class ItemsEffects {

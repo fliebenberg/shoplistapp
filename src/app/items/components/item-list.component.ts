@@ -1,4 +1,4 @@
-import { ItemsState } from './../reducers/items.reducer';
+import { ItemsState } from '../store/items.reducer';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';

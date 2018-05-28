@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { MyAuthService } from '../../services/my-auth.service';
 import { MyMessageService, Message, MessageType } from '../../services/my-message.service';
 import { MyItemsService } from '../../services/my-items.service';
-import * as ItemsActions from '../../items/actions/items.actions';
+import * as ItemsActions from '../../items/store/items.actions';
 import { Store } from '@ngrx/store';
-import { ItemsState } from './../../items/reducers/items.reducer';
+import { ItemsState } from '../../items/store/items.reducer';
 
 @Component({
   selector: 'app-root',
