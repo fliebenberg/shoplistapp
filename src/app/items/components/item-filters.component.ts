@@ -1,3 +1,4 @@
+import { MyItemsService } from './../../services/my-items.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ItemFiltersComponent implements OnInit {
 
-  constructor() { }
+  constructor(public itemsService: MyItemsService) { }
 
   ngOnInit() {
   }

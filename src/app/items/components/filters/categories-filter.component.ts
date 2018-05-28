@@ -7,7 +7,7 @@ import { MyItemsService } from '../../../services/my-items.service';
 })
 export class CategoriesFilterComponent implements OnInit {
 
-  constructor(public itemService: MyItemsService) { }
+  constructor(public itemsService: MyItemsService) { }
 
   ngOnInit() {
   }
@@ -21,6 +21,15 @@ export class CategoriesFilterComponent implements OnInit {
     } else {
       return categories;
     }
+  }
+
+  toggleCategory(category: string): void {
+    if (this.itemsService.categoriesMap.get(category)) {
+      this.itemsService.categoriesFilterCount ++;
+    } else {
+      this.itemsService.categoriesFilterCount --;
+    }
+    this.itemsService.categoriesMap.set(category, !this.itemsService.categoriesMap.get(category));
   }
 
 }

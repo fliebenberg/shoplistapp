@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MyItemsService } from '../../services/my-items.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Item } from '../item.model';
+import { Item } from '../models/item.model';
 
 @Component({
   selector: 'app-item-edit',

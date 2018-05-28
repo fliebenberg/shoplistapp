@@ -15,16 +15,16 @@
 </form>
 
 <button class="p-2 col-sm-6 col-md-4 col-lg-3 col-12 text-left" 
-    *ngFor='let category of searchCategories(categoriesFilterInput.value,itemService.categories)'
-    (click)='itemService.categoriesMap.set(category, !itemService.categoriesMap.get(category))'
+    *ngFor='let category of searchCategories(categoriesFilterInput.value,itemsService.categories)'
+    (click)='toggleCategory(category)'
 >
-  <div class='' *ngIf='itemService.categoriesMap.get(category)'>
+  <div class='' *ngIf='itemsService.categoriesMap.get(category)'>
     <span class=''>{{category}}</span>
     <div class="float-right">
       <i class='fas fa-minus-circle' style='color: red'></i>
     </div>
   </div>
-  <div class='' *ngIf='!itemService.categoriesMap.get(category)'>
+  <div class='' *ngIf='!itemsService.categoriesMap.get(category)'>
     <del>{{category}}</del>
     <div class='float-right'>
       <i class='fas fa-plus-circle' style='color: green'></i>
