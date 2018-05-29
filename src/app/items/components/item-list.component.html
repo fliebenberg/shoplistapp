@@ -26,7 +26,7 @@
 <h4 class='' *ngIf='!items'>Loading items...</h4>
 <div class='list-group'>
   <div class='list-group-item list-group-item-action py-1' 
-    *ngFor='let item of items'
+    *ngFor='let item of filteredItems'
     routerLink='/item/{{item.id}}'>
     <span class=''>
       {{item.name}}

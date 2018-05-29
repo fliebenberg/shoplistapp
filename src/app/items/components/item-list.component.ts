@@ -13,6 +13,8 @@ import { MyItemsService } from '../../services/my-items.service';
 })
 export class ItemListComponent implements OnInit, OnDestroy {
   items: Item[];
+  categories: Map<string, boolean>;
+  filteredItems: Item[];
   $itemsState: Observable<ItemsState>;
   itemsSub: Subscription;
 
@@ -24,9 +26,9 @@ export class ItemListComponent implements OnInit, OnDestroy {
     this.$itemsState = this.store.select('itemsState');
     // if ( this.itemsService.filteredItems ) { this.items = this.itemsService.filteredItems; }
     this.itemsSub = this.$itemsState.subscribe(state => {
-      console.log('[ItemList component] state items: ', state.items);
       this.items = state.items;
-      console.log('[ItemList component] items: ', this.items);
+      this.categories = state.categories;
+      this.filteredItems = [...this.items];
     });
     // this.$items = this.itemsService.$items;
   }
@@ -36,8 +38,10 @@ export class ItemListComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(searchText: string) {
-    this.itemsService.filteredItemsSubject.next(this.itemsService.searchItems(searchText, this.itemsService.items));
+    this.filteredItems = this.itemsService.searchItems(searchText, this.items);
+    // this.itemsService.filteredItemsSubject.next(this.itemsService.searchItems(searchText, this.itemsService.items));
   }
+
   ngOnDestroy() {
     this.itemsSub.unsubscribe();
   }

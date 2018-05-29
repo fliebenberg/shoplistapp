@@ -30,10 +30,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('[AppComponent] LoadItems to be called...', this.store);
     this.store.dispatch(new ItemsActions.LoadItems());
-    console.log('[App Component] LoadItems have been called...', this.store);
-    this.itemsState = this.store.select('itemsState');
+    // this.itemsState = this.store.select('itemsState');
     // console.log('[AppComponent] Loading: Value of loading: ' + this.loading.subscribe(tSTring => tSTring.toString()));
   }
   addMessage(type: MessageType) {

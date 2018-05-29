@@ -5,6 +5,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { environment } from '../../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -37,6 +38,7 @@ import { ItemsEffects } from '../items/store/items.effects';
     AppRoutingModule,
     StoreModule.forRoot({itemsState: itemsReducer}),
     EffectsModule.forRoot([ItemsEffects]),
+    StoreDevtoolsModule.instrument({}),
     UserModule,
     ItemsModule
   ],

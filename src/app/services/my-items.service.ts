@@ -3,46 +3,54 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import { Observable, throwError, Subject } from 'rxjs';
 
 import { Item } from './../items/item.model';
+import { Store } from '@ngrx/store';
+import { ItemsState } from './../items/store/items.reducer';
+import * as ItemsActions from './../items/store/items.actions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MyItemsService {
   items: Item[] = [];
-  $items: Observable<Item[]>;
+  fbItems$: Observable<Item[]>;
   itemsCollection: AngularFirestoreCollection<Item>;
 
-  filteredItems: Item[] = [];
-  filteredItemsSubject = new Subject<Item[]>();
+  // filteredItems: Item[] = [];
+  // filteredItemsSubject = new Subject<Item[]>();
   categoriesMap = new Map();
-  filters = {
-    searchFilter: '',
-    categoryFilter: ['']
-  };
+  // filters = {
+  //   searchFilter: '',
+  //   categoryFilter: ['']
+  // };
 
-  constructor(public afStore: AngularFirestore) {
+  constructor(public afStore: AngularFirestore, public store: Store<ItemsState>) {
     // needed to set this to take account of changes in firestore
     this.afStore.firestore.settings({timestampsInSnapshots: true});
 
     this.itemsCollection = this.afStore.collection('items');
-    this.$items = this.itemsCollection.valueChanges();
-    // this.$items.subscribe(items => {
-    //   this.items = items;
-    //   this.filteredItems = this.searchItems('', items);
-    //   this.filteredItemsSubject.next(this.filteredItems);
-    //   this.updateCategories();
-    //   console.log('Items loaded...');
-    // });
+    this.fbItems$ = this.itemsCollection.valueChanges();
+    this.fbItems$.subscribe(items => {
+      this.store.dispatch(new ItemsActions.LoadItemsSuccess(items));
+      // this.items = items;
+      // this.filteredItems = this.searchItems('', items);
+      // this.filteredItemsSubject.next(this.filteredItems);
+      // this.categoriesMap = this.updateCategories(this.items, this.categoriesMap);
+      // console.log('Items loaded...');
+    });
+    this.store.select('itemsState').subscribe(itemsState => {
+      this.items = itemsState.items;
+      this.categoriesMap = itemsState.categories;
+    })
   }
 
-  get $filteredItems(): Observable<Item[]> {
-    return this.filteredItemsSubject.asObservable();
-  }
+  // get $filteredItems(): Observable<Item[]> {
+  //   return this.filteredItemsSubject.asObservable();
+  // }
 
-  getItems(): Observable<Item[]> {
-    console.log('[ItemsService] Called function getitems...');
-    return this.$items;
-  }
+  // getItems(): Observable<Item[]> {
+  //   console.log('[ItemsService] Called function getitems...');
+  //   return this.fbItems$;
+  // }
 
   getItem(itemId: string): Item {
     let foundItem = null;
@@ -78,9 +86,9 @@ export class MyItemsService {
     }
   }
 
-  updateCategories(): void {
+  updateCategories(items: Item[], categories?: Map<string, boolean>): Map<string, boolean> {
     const tempCategories = [];
-    this.items.map(item => {
+    items.map(item => {
       if (!tempCategories.includes(item.category)) {
         tempCategories.push(item.category);
         console.log('Added category: ' + item.category);
@@ -88,9 +96,13 @@ export class MyItemsService {
     });
     const tempCategoriesMap = new Map();
     tempCategories.sort().forEach(category => {
-      tempCategoriesMap.set(category, true);
+      if (categories && categories.get(category) !== undefined) {
+        tempCategoriesMap.set(category, categories.get(category));
+      } else {
+        tempCategoriesMap.set(category, true);
+      }
     });
-    this.categoriesMap = tempCategoriesMap;
+    return tempCategoriesMap;
   }
 
   get categories(): string[] {

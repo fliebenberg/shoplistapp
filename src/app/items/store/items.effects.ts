@@ -14,15 +14,23 @@ export class ItemsEffects {
     @Effect()
     loadItems$: Observable<Action> = this.actions$.pipe(
         ofType(ItemsActions.LOAD_ITEMS),
-        switchMap((action) => {
-            return this.itemsService.getItems().pipe(
+        switchMap((action: ItemsActions.LoadItems) => {
+            console.log('[ItemsEffects] Handling Load Items effect...');
+            return this.itemsService.fbItems$.pipe(
                 map((items: Item[]) => {
                     console.log('[ItemsEffects] Calling LoadItemsSuccess...');
-                    const newAction = new ItemsActions.LoadItemsSuccess(items);
-                    console.log('[ItemsEffects] LoadItemsSuccess action: ', newAction);
-                    return newAction;
+                    return new ItemsActions.LoadItemsSuccess(items);
                 })
             );
+        })
+    );
+
+    @Effect()
+    loadItemsSuccess$: Observable<Action> = this.actions$.pipe(
+        ofType(ItemsActions.LOAD_ITEMS_SUCCESS),
+        map((action: ItemsActions.LoadItemsSuccess) => {
+            console.log('[ItemsEffects] Calling UpdateCategories...');
+            return new ItemsActions.UpdateCategories(this.itemsService.updateCategories(action.payload));
         })
     );
 }

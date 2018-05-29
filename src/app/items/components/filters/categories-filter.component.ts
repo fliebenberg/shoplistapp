@@ -1,3 +1,5 @@
+import { ItemsState } from './../../store/items.reducer';
+import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { MyItemsService } from '../../../services/my-items.service';
 
@@ -7,7 +9,7 @@ import { MyItemsService } from '../../../services/my-items.service';
 })
 export class CategoriesFilterComponent implements OnInit {
 
-  constructor(public itemService: MyItemsService) { }
+  constructor(public itemService: MyItemsService, store: Store<ItemsState>) { }
 
   ngOnInit() {
   }
