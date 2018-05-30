@@ -37,10 +37,10 @@ export class MyItemsService {
       // this.categoriesMap = this.updateCategories(this.items, this.categoriesMap);
       // console.log('Items loaded...');
     });
-    this.store.select('itemsState').subscribe(itemsState => {
-      this.items = itemsState.items;
-      this.categoriesMap = itemsState.categories;
-    })
+    // this.store.select('itemsState').subscribe(itemsState => {
+    //   this.items = itemsState.items;
+    //   this.categoriesMap = itemsState.categories;
+    // })
   }
 
   // get $filteredItems(): Observable<Item[]> {
@@ -57,16 +57,16 @@ export class MyItemsService {
     if (this.items) {
       foundItem = Object.assign({}, this.items.find(item => item.id === itemId));
     } else {
-      console.log('Error: Items not loaded');
+      console.log('[ItemsService][getItem] Error: Items not loaded');
     }
     return foundItem;
   }
 
   saveItem(item: Item): Promise<any> {
-    console.log('Saving Item...');
+    console.log('[ItemsService][saveItem] Saving Item to firebase', item);
     if (!item.id || item.id.length === 0) {
       item.id = this.afStore.createId();
-      console.log('New id created: ' + item.id);
+      console.log('[ItemsService][SaveItem] New id created: ' + item.id);
     }
     return this.itemsCollection.doc(item.id).set(Object.assign({}, item));
   }
@@ -75,15 +75,19 @@ export class MyItemsService {
     return this.itemsCollection.doc(itemId).delete();
   }
 
-  searchItems(searchText: string, items: Item[]): Item[] {
-    if (searchText && searchText.length > 0) {
-      return Object.assign([], items).filter((item: Item) => {
-        const include = item.name.toLowerCase().includes(searchText.toLowerCase());
-        return include;
-      });
-    } else {
-      return items;
-    }
+  filterItems(items: Item[], searchText?: string, categories?: Map<string, boolean>): Item[] {
+    const searchTextExist = searchText && searchText.length > 0;
+    const categoriesExist = categories && categories.size > 0;
+    return [...items].filter(item => {
+      let include = true;
+      if (searchTextExist && !item.name.toLowerCase().includes(searchText.toLowerCase())) {
+        include = false;
+      }
+      if ( categoriesExist && !categories.get(item.category)) {
+        include = false;
+      }
+      return include;
+    });
   }
 
   updateCategories(items: Item[], categories?: Map<string, boolean>): Map<string, boolean> {

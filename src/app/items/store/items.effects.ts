@@ -15,10 +15,9 @@ export class ItemsEffects {
     loadItems$: Observable<Action> = this.actions$.pipe(
         ofType(ItemsActions.LOAD_ITEMS),
         switchMap((action: ItemsActions.LoadItems) => {
-            console.log('[ItemsEffects] Handling Load Items effect...');
             return this.itemsService.fbItems$.pipe(
                 map((items: Item[]) => {
-                    console.log('[ItemsEffects] Calling LoadItemsSuccess...');
+                    console.log('[ItemsEffects] Effect LoadItems Calling Action LoadItemsSuccess');
                     return new ItemsActions.LoadItemsSuccess(items);
                 })
             );
@@ -29,7 +28,7 @@ export class ItemsEffects {
     loadItemsSuccess$: Observable<Action> = this.actions$.pipe(
         ofType(ItemsActions.LOAD_ITEMS_SUCCESS),
         map((action: ItemsActions.LoadItemsSuccess) => {
-            console.log('[ItemsEffects] Calling UpdateCategories...');
+            console.log('[ItemsEffects] Effect LoadItemsSuccess Calling Action UpdateCategories');
             return new ItemsActions.UpdateCategories(this.itemsService.updateCategories(action.payload));
         })
     );

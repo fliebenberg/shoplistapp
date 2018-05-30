@@ -28,7 +28,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     this.itemsSub = this.$itemsState.subscribe(state => {
       this.items = state.items;
       this.categories = state.categories;
-      this.filteredItems = [...this.items];
+      this.applyFilter('');
     });
     // this.$items = this.itemsService.$items;
   }
@@ -38,8 +38,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(searchText: string) {
-    this.filteredItems = this.itemsService.searchItems(searchText, this.items);
-    // this.itemsService.filteredItemsSubject.next(this.itemsService.searchItems(searchText, this.itemsService.items));
+    this.filteredItems = this.itemsService.filterItems(this.items, searchText, this.categories);
   }
 
   ngOnDestroy() {

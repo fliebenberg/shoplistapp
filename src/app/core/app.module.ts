@@ -36,8 +36,8 @@ import { ItemsEffects } from '../items/store/items.effects';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AppRoutingModule,
-    StoreModule.forRoot({itemsState: itemsReducer}),
-    EffectsModule.forRoot([ItemsEffects]),
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({}),
     UserModule,
     ItemsModule

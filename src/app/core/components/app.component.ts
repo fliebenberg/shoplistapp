@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(new ItemsActions.LoadItems());
+    // this.store.dispatch(new ItemsActions.LoadItems());
     // this.itemsState = this.store.select('itemsState');
     // console.log('[AppComponent] Loading: Value of loading: ' + this.loading.subscribe(tSTring => tSTring.toString()));
   }
