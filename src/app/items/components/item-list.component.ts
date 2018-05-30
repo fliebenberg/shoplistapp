@@ -1,3 +1,4 @@
+import { getCategoriesExcludeCount } from './../store/items.reducer';
 import { ItemsState } from '../store/items.reducer';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
@@ -17,6 +18,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
   filteredItems: Item[];
   $itemsState: Observable<ItemsState>;
   itemsSub: Subscription;
+  categoriesExcludeCount$: Observable<number>;
 
   constructor(public itemsService: MyItemsService, public router: Router, public store: Store<ItemsState>) {
 
@@ -24,6 +26,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.$itemsState = this.store.select('itemsState');
+    this.categoriesExcludeCount$ = this.store.select(getCategoriesExcludeCount);
     // if ( this.itemsService.filteredItems ) { this.items = this.itemsService.filteredItems; }
     this.itemsSub = this.$itemsState.subscribe(state => {
       this.items = state.items;

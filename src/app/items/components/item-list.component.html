@@ -10,8 +10,11 @@
        >
     </div>
     <div class="col-2 pl-0 ml-0">
-      <button type="button" class='btn btn-secondary btn-block text-white' routerLink='/items/filters'>
+      <button type="button" class='btn btn-info btn-block text-white' routerLink='/items/filters'>
         <i class='fas fa-filter'></i><span class='d-none d-md-inline'> Filters</span>
+        <del class='badge badge-pill badge-danger' *ngIf='(categoriesExcludeCount$ | async) > 0'>
+          {{categoriesExcludeCount$ | async}}
+        </del>
       </button>
     </div>
     <!-- <div class="input-group-prepend">

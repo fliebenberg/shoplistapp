@@ -45,4 +45,13 @@ export const getItemsState = createFeatureSelector<ItemsState>('itemsState');
 
 export const getItems = createSelector(getItemsState, itemsState => itemsState.items);
 export const getCategoriesMap = createSelector(getItemsState, itemsSate => itemsSate.categories);
+export const getCategoriesExcludeCount = createSelector(getCategoriesMap, categoriesMap => {
+  let count = 0;
+  categoriesMap.forEach((include, category) => {
+    if (!include) {
+      count ++;
+    }
+  });
+  return count;
+})
 export const getLoading = createSelector(getItemsState, itemsState => itemsState.loading);
