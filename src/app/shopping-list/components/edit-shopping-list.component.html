@@ -1,3 +1,12 @@
-<p>
-  edit-shopping-list works!
-</p>
+<h2 class="text-center">Edit Shopping List</h2>
+<div *ngIf='shoppingList'>
+  <form #SLForm='ngForm'>
+    <div class='form-group'>
+      <label for="name">Name</label>
+      <input type="text" class='form-control'
+      [(ngModel)]='shoppingList.name' #nameInput='ngModel' 
+      [ngClass] = '{"border-danger": nameInput.invalid}' 
+      placeholder='{{shoppingList.dateCreated.toDateString()}}' name='name' id='name'>
+    </div>
+  </form>
+</div>

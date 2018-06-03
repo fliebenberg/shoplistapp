@@ -36,14 +36,6 @@ export class MyItemsService {
     this.fbItemsSubscribe();
   }
 
-  // get $filteredItems(): Observable<Item[]> {
-  //   return this.filteredItemsSubject.asObservable();
-  // }
-
-  // getItems(): Observable<Item[]> {
-  //   console.log('[ItemsService] Called function getitems...');
-  //   return this.fbItems$;
-  // }
   fbItemsSubscribe() {
     this.store.select(getLoading).subscribe(loading => {
       this.loadingItems = loading;

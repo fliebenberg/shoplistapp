@@ -1,3 +1,4 @@
+import { MyShoppingListService } from './../../services/my-shopping-list.service';
 import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { MyAuthService } from '../../services/my-auth.service';
@@ -22,6 +23,7 @@ export class AppComponent implements OnInit {
     public authService: MyAuthService,
     public messageService: MyMessageService,
     public itemsService: MyItemsService,
+    public slService: MyShoppingListService,
     public store: Store<ItemsState>
   ) {
     this.messageService.$messages.subscribe((messages: Message[]) => {
@@ -30,9 +32,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.store.dispatch(new ItemsActions.LoadItems());
-    // this.itemsState = this.store.select('itemsState');
-    // console.log('[AppComponent] Loading: Value of loading: ' + this.loading.subscribe(tSTring => tSTring.toString()));
   }
   addMessage(type: MessageType) {
     this.messageService.addMessage('Test Message', type);

@@ -1,10 +1,12 @@
 import { ListItem } from './list-item.model';
 
-export interface ShoppingList {
-  id: string;
-  name: string;
-  description: string;
-  dateCreated: number;
-  itemsList: ListItem[];
-  quickLists: number[]; // quickList ids
+export class ShoppingList {
+  constructor(
+    public id: string = '',
+    public name: string = '',
+    public description: string = '',
+    public dateCreated: Date = new Date(),
+    public itemsList: ListItem[] = [],
+    public quickLists: string[] = []
+  ) { }
 }
