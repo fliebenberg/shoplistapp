@@ -4,43 +4,36 @@ import { Observable, throwError, Subject } from 'rxjs';
 
 import { Item } from './../items/item.model';
 import { Store } from '@ngrx/store';
-import { ItemsState } from './../items/store/items.reducer';
+import { ItemsState, getLoading } from './../items/store/items.reducer';
 import * as ItemsActions from './../items/store/items.actions';
+import { MyMessageService } from './my-message.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MyItemsService {
   items: Item[] = [];
+  itemsMap: Map<string, Item> = new Map();
   fbItems$: Observable<Item[]>;
+  loadingItems: boolean;
   itemsCollection: AngularFirestoreCollection<Item>;
 
   // filteredItems: Item[] = [];
   // filteredItemsSubject = new Subject<Item[]>();
-  categoriesMap = new Map();
+  categoriesMap: Map<string, boolean> = new Map();
   // filters = {
   //   searchFilter: '',
   //   categoryFilter: ['']
   // };
 
-  constructor(public afStore: AngularFirestore, public store: Store<ItemsState>) {
-    // needed to set this to take account of changes in firestore
-    this.afStore.firestore.settings({timestampsInSnapshots: true});
+  constructor(
+    public afStore: AngularFirestore,
+    public store: Store<ItemsState>,
+    public messageService: MyMessageService
+  ) {
+    this.afStore.firestore.settings({timestampsInSnapshots: true});  // needed to set this to take account of changes in firestore
 
-    this.itemsCollection = this.afStore.collection('items');
-    this.fbItems$ = this.itemsCollection.valueChanges();
-    this.fbItems$.subscribe(items => {
-      this.store.dispatch(new ItemsActions.LoadItemsSuccess(items));
-      // this.items = items;
-      // this.filteredItems = this.searchItems('', items);
-      // this.filteredItemsSubject.next(this.filteredItems);
-      // this.categoriesMap = this.updateCategories(this.items, this.categoriesMap);
-      // console.log('Items loaded...');
-    });
-    // this.store.select('itemsState').subscribe(itemsState => {
-    //   this.items = itemsState.items;
-    //   this.categoriesMap = itemsState.categories;
-    // })
+    this.fbItemsSubscribe();
   }
 
   // get $filteredItems(): Observable<Item[]> {
@@ -51,11 +44,34 @@ export class MyItemsService {
   //   console.log('[ItemsService] Called function getitems...');
   //   return this.fbItems$;
   // }
+  fbItemsSubscribe() {
+    this.store.select(getLoading).subscribe(loading => {
+      this.loadingItems = loading;
+    });
+    this.itemsCollection = this.afStore.collection('items');
+    this.fbItems$ = this.itemsCollection.valueChanges();
+    console.log('[ItemsService] About to subscribe to firebase...');
+    this.fbItems$.subscribe(
+      items => {
+        console.log('[ItemsService] About to dispatch action LoadItemsSuccess');
+        this.store.dispatch(new ItemsActions.LoadItemsSuccess(items));
+        // this.items = items;
+        this.itemsMap = new Map();
+        items.forEach(item => {
+          this.itemsMap.set(item.id, item);
+        });
+      },
+      error => {
+        console.log('[ItemsService] About to dispatch action LoadItemsFailure', error);
+        this.store.dispatch(new ItemsActions.LoadItemsFailure(error));
+      }
+    );
+  }
 
   getItem(itemId: string): Item {
     let foundItem = null;
-    if (this.items) {
-      foundItem = Object.assign({}, this.items.find(item => item.id === itemId));
+    if (!this.loadingItems) {
+      foundItem = this.itemsMap.get(itemId);
     } else {
       console.log('[ItemsService][getItem] Error: Items not loaded');
     }

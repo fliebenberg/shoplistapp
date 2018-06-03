@@ -11,6 +11,7 @@ import { environment } from '../../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { UserModule } from '../user/user.module';
 import { ItemsModule } from '../items/items.module';
+import { ShoppingListModule } from './../shopping-list/shopping-list.module';
 
 import { AppComponent } from './components/app.component';
 import { HomeComponent } from './components/home.component';
@@ -40,7 +41,8 @@ import { ItemsEffects } from '../items/store/items.effects';
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({}),
     UserModule,
-    ItemsModule
+    ItemsModule,
+    ShoppingListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

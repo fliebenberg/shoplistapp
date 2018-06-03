@@ -13,6 +13,7 @@ import { MyItemsService } from '../../services/my-items.service';
   templateUrl: './item-list.component.html'
 })
 export class ItemListComponent implements OnInit, OnDestroy {
+  loading: boolean;
   items: Item[];
   categories: Map<string, boolean>;
   filteredItems: Item[];
@@ -32,6 +33,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
       this.items = state.items;
       this.categories = state.categories;
       this.applyFilter('');
+      this.loading = state.loading;
     });
     // this.$items = this.itemsService.$items;
   }
