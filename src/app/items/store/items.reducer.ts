@@ -1,5 +1,5 @@
 import { ItemsState } from './items.reducer';
-import { Item } from '../item.model';
+import { Item } from '../models/item.model';
 import * as ItemsActions from './items.actions';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 

@@ -16,8 +16,8 @@ import { ItemsState } from '../../items/store/items.reducer';
 export class AppComponent implements OnInit {
   title = "Shop List";
   messages: Message[] = [];
-  messageType = MessageType;
-  itemsState: Observable<ItemsState>;
+  // messageType = MessageType;
+  // itemsState: Observable<ItemsState>;
 
   constructor(
     public authService: MyAuthService,

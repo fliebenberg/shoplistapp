@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Item } from "../item.model";
+import { Item } from "../models/item.model";
 
 // Load items list from Firebase
 export const LOAD_ITEMS = '[items] Load Items';

@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap, mergeMap, map, switchMap } from 'rxjs/operators';
-import { Item } from '../item.model';
+import { Item } from '../models/item.model';
 import * as ItemsActions from './items.actions';
 import { MyItemsService } from '../../services/my-items.service';
 import { MyMessageService, MessageType } from './../../services/my-message.service';

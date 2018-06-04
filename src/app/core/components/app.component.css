@@ -1,0 +1,16 @@
+a.title {
+  padding: 0px 10px;
+  background-color: yellow;
+  color: black;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+mat-sidenav {
+  background-color: darkblue;
+  min-width: 200px;
+}
+
+mat-nav-list a {
+  color: white;
+}
