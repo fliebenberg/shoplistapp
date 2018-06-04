@@ -1,0 +1,18 @@
+<h2 class='text-center'>Shopping Lists View</h2>
+<button class="btn btn-block btn-success" type='button' (click)='newShoppingList()'>Create new shopping list</button>
+<br>
+<div *ngIf='(shoppingLists$ | async).length === 0'>
+  <h5>No Shopping Lists to display</h5>
+</div>
+<div class='list-group'>
+    <div class='list-group-item list-group-item-action py-1' 
+      *ngFor='let shoppingList of shoppingLists$ | async'
+      routerLink='/list/{{shoppingList.id}}'>
+      <span>
+        {{shoppingList.name}}
+      </span>
+      <span class='text-right' style='font-size: 70%'>
+        {{'(' + slService.formatDate(shoppingList.dateCreated) + ')'}}
+      </span>
+    </div>
+  </div>

@@ -11,4 +11,7 @@
     <button class='btn btn-success col-3 w-25' type='button' routerLink="/login">Sign In</button>
     <button class='btn btn-warning col-3 w-25' type='button' routerLink="/signup">Sign Up</button>
   </div>
+  <div *ngIf='authService.authenticated'>
+    <button class="btn btn-block btn-info" type='button' routerLink='/lists'>View Your Shopping Lists</button>
+  </div>
 </div>

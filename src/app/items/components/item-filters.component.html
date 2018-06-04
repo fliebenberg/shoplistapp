@@ -2,9 +2,9 @@
 <ul class="nav nav-tabs">
   <li class="nav-item">
     <a class="nav-link" routerLink='./categories' routerLinkActive='active'>
-      Categories 
-      <del class='badge badge-pill badge-danger' *ngIf='itemsService.categoriesFilterCount > 0'>
-        {{itemsService.categoriesFilterCount}}
+      Categories
+      <del class='badge badge-pill badge-danger' *ngIf='(categoriesExcludeCount$ | async) > 0'>
+        {{categoriesExcludeCount$ | async}}
       </del>
     </a>
   </li>
@@ -12,7 +12,7 @@
     <a class="nav-link" routerLink='./providers' routerLinkActive='active'>Providers</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" routerLink='./categories' routerLinkActive='active'>Brands</a>
+    <a class="nav-link" routerLink='./providers' routerLinkActive='active'>Brands</a>
   </li>
 </ul>
 <router-outlet></router-outlet>

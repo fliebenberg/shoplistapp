@@ -10,8 +10,11 @@
        >
     </div>
     <div class="col-2 pl-0 ml-0">
-      <button type="button" class='btn btn-secondary btn-block text-white' routerLink='/items/filters'>
+      <button type="button" class='btn btn-info btn-block text-white' routerLink='/items/filters'>
         <i class='fas fa-filter'></i><span class='d-none d-md-inline'> Filters</span>
+        <del class='badge badge-pill badge-danger' *ngIf='(categoriesExcludeCount$ | async) > 0'>
+          {{categoriesExcludeCount$ | async}}
+        </del>
       </button>
     </div>
     <!-- <div class="input-group-prepend">
@@ -23,10 +26,11 @@
   </div>
 </form>
 <h2 class='text-center'>Item List</h2>
-<h4 class='' *ngIf='!items'>Loading items...</h4>
+<h4 class='' *ngIf='loading'>Loading items...</h4>
+<h4 *ngIf='!loading && filteredItems.length == 0'>No items to display. Check your filters or search text.</h4>
 <div class='list-group'>
   <div class='list-group-item list-group-item-action py-1' 
-    *ngFor='let item of items'
+    *ngFor='let item of filteredItems'
     routerLink='/item/{{item.id}}'>
     <span class=''>
       {{item.name}}

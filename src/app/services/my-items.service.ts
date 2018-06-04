@@ -2,62 +2,84 @@ import { Injectable, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable, throwError, Subject } from 'rxjs';
 
-import { Item } from '../items/models/item.model';
-import { ItemsFilter } from '../items/models/items-filter.model';
+import { Item } from './../items/models/item.model';
+import { Store } from '@ngrx/store';
+import { ItemsState, getLoading } from './../items/store/items.reducer';
+import * as ItemsActions from './../items/store/items.actions';
+import { MyMessageService } from './my-message.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MyItemsService {
   items: Item[] = [];
-  $items: Observable<Item[]>;
+  itemsMap: Map<string, Item> = new Map();
+  fbItems$: Observable<Item[]>;
+  loadingItems: boolean;
   itemsCollection: AngularFirestoreCollection<Item>;
-  categoriesMap = new Map();
   categoriesFilterCount = 0;
 
-  filteredItems: Item[] = [];
-  filteredItemsSubject = new Subject<Item[]>();
-  itemsFilters = new ItemsFilter();
-  itemsFiltersSubject = new Subject<ItemsFilter>();
+  // filteredItems: Item[] = [];
+  // filteredItemsSubject = new Subject<Item[]>();
+  categoriesMap: Map<string, boolean> = new Map();
+  // filters = {
+  //   searchFilter: '',
+  //   categoryFilter: ['']
+  // };
 
-  constructor(public afStore: AngularFirestore) {
-    // needed to set this to take account of changes in firestore
-    this.afStore.firestore.settings({timestampsInSnapshots: true});
+  constructor(
+    public afStore: AngularFirestore,
+    public store: Store<ItemsState>,
+    public messageService: MyMessageService
+  ) {
+    this.afStore.firestore.settings({timestampsInSnapshots: true});  // needed to set this to take account of changes in firestore
 
-    this.itemsCollection = this.afStore.collection('items');
-    this.$items = this.itemsCollection.valueChanges();
-    this.$items.subscribe(items => {
-      this.items = items;
-      this.filteredItems = this.searchItems('', items);
-      this.filteredItemsSubject.next(this.filteredItems);
-      this.updateCategories();
-      console.log('Items loaded...');
+    this.fbItemsSubscribe();
+  }
+
+  fbItemsSubscribe() {
+    this.store.select(getLoading).subscribe(loading => {
+      this.loadingItems = loading;
     });
+    this.itemsCollection = this.afStore.collection('items');
+    this.fbItems$ = this.itemsCollection.valueChanges();
+    console.log('[ItemsService] About to subscribe to firebase...');
+    this.fbItems$.subscribe(
+      items => {
+        console.log('[ItemsService] About to dispatch action LoadItemsSuccess');
+        this.store.dispatch(new ItemsActions.LoadItemsSuccess(items));
+        // this.items = items;
+        this.itemsMap = new Map();
+        items.forEach(item => {
+          this.itemsMap.set(item.id, item);
+        });
+      },
+      error => {
+        console.log('[ItemsService] About to dispatch action LoadItemsFailure', error);
+        this.store.dispatch(new ItemsActions.LoadItemsFailure(error));
+      }
+    );
   }
 
-  get $filteredItems(): Observable<Item[]> {
-    return this.filteredItemsSubject.asObservable();
-  }
-
-  get itemsFilters$(): Observable<ItemsFilter> {
-    return this.itemsFiltersSubject.asObservable();
-  }
+  // get itemsFilters$(): Observable<ItemsFilter> {
+  //   return this.itemsFiltersSubject.asObservable();
+  // }
 
   getItem(itemId: string): Item {
     let foundItem = null;
-    if (this.items) {
-      foundItem = Object.assign({}, this.items.find(item => item.id === itemId));
+    if (!this.loadingItems) {
+      foundItem = this.itemsMap.get(itemId);
     } else {
-      console.log('Error: Items not loaded');
+      console.log('[ItemsService][getItem] Error: Items not loaded');
     }
     return foundItem;
   }
 
   saveItem(item: Item): Promise<any> {
-    console.log('Saving Item...');
+    console.log('[ItemsService][saveItem] Saving Item to firebase', item);
     if (!item.id || item.id.length === 0) {
       item.id = this.afStore.createId();
-      console.log('New id created: ' + item.id);
+      console.log('[ItemsService][SaveItem] New id created: ' + item.id);
     }
     return this.itemsCollection.doc(item.id).set(Object.assign({}, item));
   }
@@ -66,48 +88,37 @@ export class MyItemsService {
     return this.itemsCollection.doc(itemId).delete();
   }
 
-  searchItems(searchText: string, items: Item[]): Item[] {
-    if (searchText && searchText.length > 0) {
-      return Object.assign([], items).filter((item: Item) => {
-        const include = item.name.toLowerCase().includes(searchText.toLowerCase());
-        return include;
-      });
-    } else {
-      return items;
-    }
-  }
-
-  filterItems(filters: ItemsFilter, items: Item[]): Item[] {
-    const newItems = [];
-    items.filter(item => {
+  filterItems(items: Item[], searchText?: string, categories?: Map<string, boolean>): Item[] {
+    const searchTextExist = searchText && searchText.length > 0;
+    const categoriesExist = categories && categories.size > 0;
+    return [...items].filter(item => {
       let include = true;
-      if (
-        item.category &&
-        filters.categoriesFilter.length > 0 &&
-        filters.categoriesFilter.indexOf(item.category) === -1
-      ) { include = true; } else { include = false; }
-      if (
-        include &&
-        filters.searchFilter.length > 0 &&
-        item.name.toLowerCase().includes(filters.searchFilter.toLowerCase())
-      ) { include = true; } else { include = false; }
+      if (searchTextExist && !item.name.toLowerCase().includes(searchText.toLowerCase())) {
+        include = false;
+      }
+      if ( categoriesExist && !categories.get(item.category)) {
+        include = false;
+      }
       return include;
     });
-    return newItems;
   }
 
-  updateCategories(): void {
+  updateCategories(items: Item[], categories?: Map<string, boolean>): Map<string, boolean> {
     const tempCategories = [];
-    this.items.map(item => {
+    items.map(item => {
       if (!tempCategories.includes(item.category)) {
         tempCategories.push(item.category);
       }
     });
     const tempCategoriesMap = new Map();
     tempCategories.sort().forEach(category => {
-      tempCategoriesMap.set(category, true);
+      if (categories && categories.get(category) !== undefined) {
+        tempCategoriesMap.set(category, categories.get(category));
+      } else {
+        tempCategoriesMap.set(category, true);
+      }
     });
-    this.categoriesMap = tempCategoriesMap;
+    return tempCategoriesMap;
   }
 
   get categories(): string[] {
@@ -116,7 +127,7 @@ export class MyItemsService {
 
   get filteredCategories(): string[] {
     const tempArray: string[] = [];
-    this.categoriesMap.forEach(([key, value]) => {
+    this.categoriesMap.forEach((value: boolean, key: string) => {
       if (!value) {
         tempArray.push(key);
       }

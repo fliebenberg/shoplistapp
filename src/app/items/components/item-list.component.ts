@@ -1,3 +1,6 @@
+import { getCategoriesExcludeCount } from './../store/items.reducer';
+import { ItemsState } from '../store/items.reducer';
+import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -10,18 +13,27 @@ import { MyItemsService } from '../../services/my-items.service';
   templateUrl: './item-list.component.html'
 })
 export class ItemListComponent implements OnInit, OnDestroy {
+  loading: boolean;
   items: Item[];
-  $items: Observable<Item[]>;
+  categories: Map<string, boolean>;
+  filteredItems: Item[];
+  $itemsState: Observable<ItemsState>;
   itemsSub: Subscription;
+  categoriesExcludeCount$: Observable<number>;
 
-  constructor(public itemsService: MyItemsService, public router: Router) {
+  constructor(public itemsService: MyItemsService, public router: Router, public store: Store<ItemsState>) {
 
   }
 
   ngOnInit() {
-    if ( this.itemsService.filteredItems ) { this.items = this.itemsService.filteredItems; }
-    this.itemsSub = this.itemsService.$filteredItems.subscribe(items => {
-      this.items = items;
+    this.$itemsState = this.store.select('itemsState');
+    this.categoriesExcludeCount$ = this.store.select(getCategoriesExcludeCount);
+    // if ( this.itemsService.filteredItems ) { this.items = this.itemsService.filteredItems; }
+    this.itemsSub = this.$itemsState.subscribe(state => {
+      this.items = state.items;
+      this.categories = state.categories;
+      this.applyFilter('');
+      this.loading = state.loading;
     });
     // this.$items = this.itemsService.$items;
   }
@@ -31,8 +43,9 @@ export class ItemListComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(searchText: string) {
-    this.itemsService.filteredItemsSubject.next(this.itemsService.searchItems(searchText, this.itemsService.items));
+    this.filteredItems = this.itemsService.filterItems(this.items, searchText, this.categories);
   }
+
   ngOnDestroy() {
     this.itemsSub.unsubscribe();
   }
