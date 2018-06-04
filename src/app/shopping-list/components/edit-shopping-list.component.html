@@ -1,12 +1,18 @@
 <h2 class="text-center">Edit Shopping List</h2>
 <div *ngIf='shoppingList'>
+  <div class='justify-content-between'>
+    <button class="btn btn-success" type='button' (click)='saveList()'>Save List</button>
+    <button class="btn btn-danger" type='button' (click)='deleteList()'>Delete List</button>
+  </div>
+  <br>
   <form #SLForm='ngForm'>
+    <div class='text-right'>Created: {{slService.formatDate(shoppingList.dateCreated)}}</div>
     <div class='form-group'>
       <label for="name">Name</label>
-      <input type="text" class='form-control'
+      <input type="text" required class='form-control'
       [(ngModel)]='shoppingList.name' #nameInput='ngModel' 
       [ngClass] = '{"border-danger": nameInput.invalid}' 
-      placeholder='{{shoppingList.dateCreated.toDateString()}}' name='name' id='name'>
+      placeholder='{{slService.formatDate(shoppingList.dateCreated)}}' name='name' id='name'>
     </div>
   </form>
 </div>

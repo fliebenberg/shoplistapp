@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { firestore } from 'firebase/app';
 import { MyShoppingListService } from './../../services/my-shopping-list.service';
 import { MyMessageService, MessageType } from './../../services/my-message.service';
 import { ShoppingList } from './../models/shopping-list.model';
@@ -42,6 +43,18 @@ export class EditShoppingListComponent implements OnInit {
         }
       });
     }
+  }
+
+  saveList() {
+    if (this.shoppingList.name === '') {
+      this.shoppingList.name = this.slService.formatDate(this.shoppingList.dateCreated);
+    }
+    this.slService.saveShoppingList(this.shoppingList);
+  }
+
+  deleteList() {
+    this.slService.deleteShoppingList(this.shoppingList);
+    this.router.navigate(['/lists']);
   }
 
 }

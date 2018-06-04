@@ -9,6 +9,7 @@ import { EditShoppingListComponent } from './components/edit-shopping-list.compo
 import { ViewShoppingListsComponent } from './components/view-shopping-lists.component';
 import { shoppingListReducer } from './store/shopping-list.reducer';
 import { ShoppingListEffects } from './store/shopping-list.effects';
+import { ShoppingListViewComponent } from './components/shopping-list-view.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { ShoppingListEffects } from './store/shopping-list.effects';
     StoreModule.forFeature('shoppingListsState', shoppingListReducer),
     // EffectsModule.forFeature([ShoppingListEffects]),
   ],
-  declarations: [EditShoppingListComponent, ViewShoppingListsComponent]
+  declarations: [EditShoppingListComponent, ViewShoppingListsComponent, ShoppingListViewComponent]
 })
 export class ShoppingListModule { }

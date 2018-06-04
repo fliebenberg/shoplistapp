@@ -32,6 +32,7 @@ const routes: Routes = [
   {path: 'item/:id/edit', component: ItemEditComponent},
   {path: 'lists', component: ViewShoppingListsComponent},
   {path: 'list/add', component: EditShoppingListComponent},
+  {path: 'list/:id', component: EditShoppingListComponent},
   {path: '**', component: PageNotFoundComponent}
 ];
 

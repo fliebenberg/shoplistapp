@@ -1,3 +1,4 @@
+import { firestore } from 'firebase/app';
 import { ShoppingList } from './../shopping-list/models/shopping-list.model';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
@@ -34,7 +35,7 @@ export class MyShoppingListService {
           this.slMap = new Map();
           shoppingLists.forEach((shoppingList: ShoppingList) => {
             this.slMap.set(shoppingList.id, shoppingList);
-          })
+          });
         } else {
           console.log('[SLService] Could not load ShoppingLists');
         }
@@ -54,5 +55,29 @@ export class MyShoppingListService {
       console.log('[SLService][getShoppingList] Error: Shopping Lists not loaded');
     }
     return foundSL;
+  }
+
+  saveShoppingList(shoppingList: ShoppingList): Promise<any> {
+    console.log('[SLService][saveList] Saving Shopping List to firebase', shoppingList);
+    if (!shoppingList.id || shoppingList.id.length === 0) {
+      shoppingList.id = this.afStore.createId();
+      console.log('[SLService][saveList] New id created: ' + shoppingList.id);
+    }
+    return this.slCollection.doc(shoppingList.id).set(Object.assign({}, shoppingList));
+  }
+
+  deleteShoppingList(shoppingList: ShoppingList): Promise<any> {
+    return this.slCollection.doc(shoppingList.id).delete();
+  }
+
+  formatDate(date: firestore.Timestamp): string {
+    return date.toDate().toLocaleString(undefined, {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
 }

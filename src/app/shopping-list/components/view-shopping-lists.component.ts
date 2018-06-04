@@ -1,3 +1,4 @@
+import { MyShoppingListService } from './../../services/my-shopping-list.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -12,7 +13,7 @@ import { ShoppingList } from './../models/shopping-list.model';
 export class ViewShoppingListsComponent implements OnInit {
   shoppingLists$: Observable<ShoppingList[]>;
 
-  constructor(public store: Store<ShoppingListsState>, public router: Router) { }
+  constructor(public store: Store<ShoppingListsState>, public router: Router, public slService: MyShoppingListService) { }
 
   ngOnInit() {
     this.shoppingLists$ = this.store.select(getSLArray);
