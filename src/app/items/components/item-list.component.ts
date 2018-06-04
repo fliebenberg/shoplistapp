@@ -21,6 +21,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
   itemsSub: Subscription;
   categoriesExcludeCount$: Observable<number>;
 
+
   constructor(public itemsService: MyItemsService, public router: Router, public store: Store<ItemsState>) {
 
   }

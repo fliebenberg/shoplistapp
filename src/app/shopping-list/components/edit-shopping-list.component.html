@@ -15,4 +15,16 @@
       placeholder='{{slService.formatDate(shoppingList.dateCreated)}}' name='name' id='name'>
     </div>
   </form>
+  <br>
+  <h4 class="">Items</h4>
+  <h5 *ngIf='shoppingList.itemsList.length === 0'>No items added yet</h5>
+  <div class="list-group">
+    <div class='list-group-item list-group-item-action py-1' 
+        *ngFor='let item of shoppingList.itemsList'
+    >
+      <span>
+        {{item.name}}
+      </span>
+    </div>
+  </div>
 </div>

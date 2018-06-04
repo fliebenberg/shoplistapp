@@ -125,13 +125,13 @@ export class MyItemsService {
     return Array.from(this.categoriesMap.keys());
   }
 
-  get filteredCategories(): string[] {
-    const tempArray: string[] = [];
-    this.categoriesMap.forEach((value: boolean, key: string) => {
-      if (!value) {
-        tempArray.push(key);
-      }
-    });
-    return tempArray;
-  }
+  // get filteredCategories(): string[] {
+  //   const tempArray: string[] = [];
+  //   this.categoriesMap.forEach((value: boolean, key: string) => {
+  //     if (!value) {
+  //       tempArray.push(key);
+  //     }
+  //   });
+  //   return tempArray;
+  // }
 }
