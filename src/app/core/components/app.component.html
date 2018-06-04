@@ -1,5 +1,6 @@
 <mat-sidenav-container>
   <mat-sidenav color='primary' #sideNav>
+    <h3>Menu</h3>
     <mat-nav-list>
       <a mat-list-item routerLink='/lists' (click)='sideNav.close()'>Lists</a>
       <a mat-list-item routerLink='/items' (click)='sideNav.close()'>Items</a>
@@ -15,7 +16,8 @@
         <a mat-list-item routerLink='/lists'>Lists</a>
         <a mat-list-item routerLink='/items'>Items</a>
       </mat-nav-list>
-      <span class='ml-auto'>
+      <div fxFlex='1 1 auto'></div>
+      <span>
         <mat-nav-list fxLayout='row' *ngIf='!authService.currentUser'>
           <a mat-list-item routerLink='/login'>Sign In</a>
           <a mat-list-item routerLink='/signup'>Sign Up</a>
@@ -26,7 +28,7 @@
         </mat-nav-list>
       </span>
     </mat-toolbar>
-    <div class='container'>
+    <div fxLayout='column'>
       <router-outlet></router-outlet>
     </div>
     <app-message-toast *ngIf = 'messages && messages.length > 0' [messages] = 'messages'></app-message-toast>

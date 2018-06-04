@@ -8,7 +8,9 @@ a.title {
 
 mat-sidenav {
   background-color: darkblue;
+  color: white;
   min-width: 200px;
+  padding: 10px;
 }
 
 mat-nav-list a {

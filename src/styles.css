@@ -1,6 +1,2 @@
 @import url('https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css');
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-
-body, html {
-  height: 100%;
-}
