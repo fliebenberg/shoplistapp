@@ -1,34 +1,45 @@
 <mat-sidenav-container>
   <mat-sidenav color='primary' #sideNav>
-    <h3>Menu</h3>
+    <h4 class='mb-1'>Menu</h4>
+    <mat-divider></mat-divider>
     <mat-nav-list>
       <a mat-list-item routerLink='/lists' (click)='sideNav.close()'>Lists</a>
       <a mat-list-item routerLink='/items' (click)='sideNav.close()'>Items</a>
     </mat-nav-list>
+    <h4 class='mb-1'>User</h4>
+    <mat-divider style='color: whitesmoke'></mat-divider>
+    <mat-nav-list *ngIf='!authService.currentUser'>
+      <a mat-list-item routerLink='/login' (click)='sideNav.close()'>Sign In</a>
+      <a mat-list-item routerLink='/signup' (click)='sideNav.close()'>Sign Up</a>
+    </mat-nav-list>
+    <mat-nav-list *ngIf='authService.currentUser'>
+      <a mat-list-item routerLink='/user' (click)='sideNav.close()'>User Account</a>
+      <a mat-list-item (click)='authService.logOut("/")' (click)='sideNav.close()'>Sign Out</a>
+    </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color='primary' fxLayout='row'>
-      <button mat-icon-button (click)='sideNav.toggle()' type="menu" fxHide.gt-sm='true' class='mr-1'>
+      <button mat-icon-button (click)='sideNav.toggle()' type="menu" class='mr-1'>
         <mat-icon>menu</mat-icon>
       </button>
-      <a mat-button class='title' routerLink='/'><h3>{{title}}</h3></a>
+      <mat-nav-list>
+        <a mat-list-item class='title' routerLink='/'><h3>{{title}}</h3></a>
+      </mat-nav-list>
       <mat-nav-list fxLayout='row' fxHide.lt-md='true'>
         <a mat-list-item routerLink='/lists'>Lists</a>
         <a mat-list-item routerLink='/items'>Items</a>
       </mat-nav-list>
-      <div fxFlex='1 1 auto'></div>
-      <span>
+      <span class='ml-auto'>
         <mat-nav-list fxLayout='row' *ngIf='!authService.currentUser'>
           <a mat-list-item routerLink='/login'>Sign In</a>
-          <a mat-list-item routerLink='/signup'>Sign Up</a>
+          <a mat-list-item routerLink='/signup' fxHide.lt-md='true'>Sign Up</a>
         </mat-nav-list>
-        <mat-nav-list fxLayout='row' *ngIf='authService.currentUser'>
-          <a mat-list-item (click)='authService.logOut("/")'>Sign Out</a>
-          <a mat-list-item routerLink='/user'>User Account</a>
-        </mat-nav-list>
+        <mat-nav-list *ngIf='authService.currentUser'>
+            <a mat-list-item (click)='authService.logOut("/")'>Sign Out</a>
+          </mat-nav-list>
       </span>
     </mat-toolbar>
-    <div fxLayout='column'>
+    <div>
       <router-outlet></router-outlet>
     </div>
     <app-message-toast *ngIf = 'messages && messages.length > 0' [messages] = 'messages'></app-message-toast>

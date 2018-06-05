@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import {
   MatButtonModule,
   MatCardModule,
+  MatDividerModule,
   MatIconModule,
   MatListModule,
   MatSidenavModule,
@@ -11,6 +12,7 @@ import {
 const components = [
   MatButtonModule,
   MatCardModule,
+  MatDividerModule,
   MatIconModule,
   MatListModule,
   MatSidenavModule,

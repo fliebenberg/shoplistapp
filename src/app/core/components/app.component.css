@@ -1,18 +1,21 @@
-a.title {
-  padding: 0px 10px;
-  background-color: yellow;
-  color: black;
-  border-radius: 10px;
-  text-decoration: none;
+mat-sidenav-container {
+  min-height: 100%;
 }
-
 mat-sidenav {
+  position: fixed;
   background-color: darkblue;
   color: white;
   min-width: 200px;
   padding: 10px;
 }
 
+mat-sidenav-content {
+  min-height: 100%;
+}
+
+mat-divider {
+  border-top-color: lightgrey;
+}
 mat-nav-list a {
   color: white;
 }
