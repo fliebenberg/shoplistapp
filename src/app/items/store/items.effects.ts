@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import { tap, mergeMap, map, switchMap } from 'rxjs/operators';
 import { Item } from '../models/item.model';
 import * as ItemsActions from './items.actions';
-import { MyItemsService } from '../../services/my-items.service';
-import { MyMessageService, MessageType } from './../../services/my-message.service';
+import { MyItemsService } from '../my-items.service';
+import { MyMessageService, MessageType } from '../../core/services/my-message.service';
 
 @Injectable()
 export class ItemsEffects {

@@ -1,10 +1,10 @@
 import { firestore } from 'firebase/app';
-import { ShoppingList } from './../shopping-list/models/shopping-list.model';
+import { ShoppingList } from './models/shopping-list.model';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Store } from '@ngrx/store';
-import { ShoppingListsState, getSLState, getSLLoading } from './../shopping-list/store/shopping-list.reducer';
-import * as SLActions from './../shopping-list/store/shopping-list.actions';
+import { ShoppingListsState, getSLState, getSLLoading } from './store/shopping-list.reducer';
+import * as SLActions from './store/shopping-list.actions';
 
 @Injectable({
   providedIn: 'root'

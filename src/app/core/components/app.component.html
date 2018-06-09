@@ -39,7 +39,7 @@
           </mat-nav-list>
       </span>
     </mat-toolbar>
-    <div>
+    <div class='container-fluid'>
       <router-outlet></router-outlet>
     </div>
     <app-message-toast *ngIf = 'messages && messages.length > 0' [messages] = 'messages'></app-message-toast>

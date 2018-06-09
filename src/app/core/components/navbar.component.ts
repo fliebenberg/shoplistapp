@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
-import { MyAuthService } from '../../services/my-auth.service';
+import { MyAuthService } from '../services/my-auth.service';
 
 @Component({
   selector: 'app-navbar',

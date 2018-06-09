@@ -6,7 +6,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Item } from '../models/item.model';
-import { MyItemsService } from '../../services/my-items.service';
+import { MyItemsService } from '../my-items.service';
 
 @Component({
   selector: 'app-item-list',

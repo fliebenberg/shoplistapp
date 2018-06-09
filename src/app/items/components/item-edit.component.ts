@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MyItemsService } from '../../services/my-items.service';
+import { MyItemsService } from '../my-items.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MyMessageService, MessageType } from './../../services/my-message.service';
+import { MyMessageService, MessageType } from '../../core/services/my-message.service';
 import { Item } from '../models/item.model';
 
 @Component({

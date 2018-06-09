@@ -1,5 +1,6 @@
-<button class="btn btn-success btn-block" (click)= 'addItem()'>New item</button>
-<br>
+
+<h2 class='text-center'>Item List</h2>
+
 <form #searchForm = 'ngForm'>
   <div class='row d-flex-inline'>
     <div class="col-10 pr-0 mr-0">
@@ -25,7 +26,7 @@
     </div> -->
   </div>
 </form>
-<h2 class='text-center'>Item List</h2>
+<br>
 <h4 class='' *ngIf='loading'>Loading items...</h4>
 <h4 *ngIf='!loading && filteredItems.length == 0'>No items to display. Check your filters or search text.</h4>
 <div class='list-group'>
@@ -42,3 +43,4 @@
     </div>
   </div>
 </div>
+<button class="btn btn-success btn-block" (click)= 'addItem()'>New item</button>

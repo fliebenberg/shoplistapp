@@ -1,4 +1,4 @@
-import { MyShoppingListService } from './../../services/my-shopping-list.service';
+import { MyShoppingListService } from '../my-shopping-list.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Actions, Effect, ofType } from '@ngrx/effects';

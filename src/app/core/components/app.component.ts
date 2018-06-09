@@ -1,9 +1,9 @@
-import { MyShoppingListService } from './../../services/my-shopping-list.service';
+import { MyShoppingListService } from '../../shopping-list/my-shopping-list.service';
 import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
-import { MyAuthService } from '../../services/my-auth.service';
-import { MyMessageService, Message, MessageType } from '../../services/my-message.service';
-import { MyItemsService } from '../../services/my-items.service';
+import { MyAuthService } from '../services/my-auth.service';
+import { MyMessageService, Message, MessageType } from '../services/my-message.service';
+import { MyItemsService } from '../../items/my-items.service';
 import * as ItemsActions from '../../items/store/items.actions';
 import { Store } from '@ngrx/store';
 import { ItemsState } from '../../items/store/items.reducer';

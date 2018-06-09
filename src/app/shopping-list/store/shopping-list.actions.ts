@@ -5,6 +5,7 @@ import { Action } from "@ngrx/store";
 export const LOAD_SHOPPING_LISTS = '[shopping list] Load Shopping Lists';
 export const LOAD_SHOPPING_LISTS_SUCCESS = '[shopping list] Shopping Lists Loaded Successfully';
 export const LOAD_SHOPPING_LISTS_FAILURE = '[shopping list] Shopping Lists Not Loaded Successfully';
+export const ADD_SHOPPING_LIST = '[shopping list] Add Shopping';
 export const DELETE_SHOPPING_LIST = '[shopping list] Delete Shopping List';
 
 export class LoadShoppingLists implements Action {
@@ -21,6 +22,11 @@ export class LoadShoppingListsFailure implements Action {
     constructor (public payload: any) {} // error
 }
 
+export class AddShoppingList implements Action {
+    readonly type = ADD_SHOPPING_LIST;
+    constructor (public payload: ShoppingList) {} // ShoppingList object to be deleted
+}
+
 export class DeleteShoppingList implements Action {
     readonly type = DELETE_SHOPPING_LIST;
     constructor (public payload: ShoppingList) {} // ShoppingList object to be deleted
@@ -30,4 +36,5 @@ export type Actions =
     LoadShoppingLists |
     LoadShoppingListsSuccess |
     LoadShoppingListsFailure |
+    AddShoppingList |
     DeleteShoppingList;

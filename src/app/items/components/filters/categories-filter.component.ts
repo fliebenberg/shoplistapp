@@ -1,6 +1,6 @@
 import { Observable, Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
-import { MyItemsService } from '../../../services/my-items.service';
+import { MyItemsService } from '../../my-items.service';
 import { Store } from '@ngrx/store';
 import { ItemsState, getCategoriesMap } from './../../store/items.reducer';
 import * as ItemsActions from './../../store/items.actions';

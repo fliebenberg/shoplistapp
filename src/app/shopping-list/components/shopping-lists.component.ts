@@ -1,10 +1,10 @@
-import { MyShoppingListService } from './../../services/my-shopping-list.service';
+import { MyShoppingListService } from '../my-shopping-list.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { ShoppingListsState, getSLArray } from './../store/shopping-list.reducer';
-import { ShoppingList } from './../models/shopping-list.model';
+import { ShoppingListsState, getSLArray } from '../store/shopping-list.reducer';
+import { ShoppingList } from '../models/shopping-list.model';
 
 @Component({
   selector: 'app-view-shopping-lists',

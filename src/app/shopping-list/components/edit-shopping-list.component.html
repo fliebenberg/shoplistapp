@@ -1,27 +1,30 @@
-<h2 class="text-center">Edit Shopping List</h2>
-<div *ngIf='shoppingList'>
-  <div class='justify-content-between'>
-    <button class="btn btn-success" type='button' (click)='saveList()'>Save List</button>
-    <button class="btn btn-danger" type='button' (click)='deleteList()'>Delete List</button>
-  </div>
-  <br>
-  <form #SLForm='ngForm'>
-    <div class='text-right'>Created: {{slService.formatDate(shoppingList.dateCreated)}}</div>
-    <div class='form-group'>
-      <label for="name">Name</label>
-      <input type="text" required class='form-control'
-      [(ngModel)]='shoppingList.name' #nameInput='ngModel' 
-      [ngClass] = '{"border-danger": nameInput.invalid}' 
-      placeholder='{{slService.formatDate(shoppingList.dateCreated)}}' name='name' id='name'>
+<div>
+  <h2 class="text-center">Edit Shopping List</h2>
+  <div *ngIf='shoppingList'>
+    <br>
+    <form #SLForm='ngForm'>
+      <div class='text-right text-sm'>Created: {{slService.formatDate(shoppingList.dateCreated)}}</div>
+      <div class='form-group'>
+        <div class="input-group input-group-lg">
+          <label for="name">Name</label>
+          <input type="text" required class='form-control'
+          [(ngModel)]='shoppingList.name' #nameInput='ngModel' 
+          [ngClass] = '{"border-danger": nameInput.invalid}' 
+          placeholder='{{slService.formatDate(shoppingList.dateCreated)}}' name='name' id='name'>
+        </div>
+      </div>
+    </form>
+    <div class='d-flex justify-content-between'>
+      <button class="btn btn-success" type='button' (click)='saveList()'>Save List</button>
+      <button class="btn btn-danger" type='button' (click)='deleteList()'>Delete List</button>
     </div>
-  </form>
-  <br>
-  <h4 class="">Items</h4>
-  <h5 *ngIf='shoppingList.itemsList.length === 0'>No items added yet</h5>
-  <div class="list-group">
-    <div class='list-group-item list-group-item-action py-1' 
-        *ngFor='let item of shoppingList.itemsList'
-    >
+    <br>
+    <h4 class="">Items</h4>
+    <h5 *ngIf='shoppingList.itemsList.length === 0'>No items added yet</h5>
+    <div class="list-group">
+      <div class='list-group-item list-group-item-action py-1' 
+      *ngFor='let item of shoppingList.itemsList'
+      >
       <span>
         {{item.name}}
       </span>

@@ -2,11 +2,11 @@ import { Injectable, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable, throwError, Subject } from 'rxjs';
 
-import { Item } from './../items/models/item.model';
+import { Item } from './models/item.model';
 import { Store } from '@ngrx/store';
-import { ItemsState, getLoading } from './../items/store/items.reducer';
-import * as ItemsActions from './../items/store/items.actions';
-import { MyMessageService } from './my-message.service';
+import { ItemsState, getLoading } from './store/items.reducer';
+import * as ItemsActions from './store/items.actions';
+import { MyMessageService } from '../core/services/my-message.service';
 
 @Injectable({
   providedIn: 'root'

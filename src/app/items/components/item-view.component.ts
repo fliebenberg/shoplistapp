@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router,  ActivatedRoute } from '@angular/router';
 
-import { MyItemsService } from '../../services/my-items.service';
+import { MyItemsService } from '../my-items.service';
 import { ItemsState } from './../store/items.reducer';
 import { Store } from '@ngrx/store';
 import { Item } from '../models/item.model';
-import { MyMessageService, MessageType } from '../../services/my-message.service';
+import { MyMessageService, MessageType } from '../../core/services/my-message.service';
 
 @Component({
   selector: 'app-item-view',

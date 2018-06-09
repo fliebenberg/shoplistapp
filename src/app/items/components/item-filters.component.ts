@@ -1,4 +1,4 @@
-import { MyItemsService } from './../../services/my-items.service';
+import { MyItemsService } from '../my-items.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
