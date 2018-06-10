@@ -1,9 +1,10 @@
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { firestore } from 'firebase/app';
 import { ShoppingList } from './models/shopping-list.model';
-import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Store } from '@ngrx/store';
-import { ShoppingListsState, getSLState, getSLLoading } from './store/shopping-list.reducer';
+import { ShoppingListsState, getSLLoading } from './store/shopping-list.reducer';
 import * as SLActions from './store/shopping-list.actions';
 
 @Injectable({
@@ -11,6 +12,7 @@ import * as SLActions from './store/shopping-list.actions';
 })
 export class MyShoppingListService {
   slCollection: AngularFirestoreCollection<ShoppingList>;
+  shoppingLists$: Observable<ShoppingList[]>;
   slMap: Map<string, ShoppingList>;
   slLoading = true;
 
@@ -26,8 +28,9 @@ export class MyShoppingListService {
       this.slLoading = loading;
     });
     this.slCollection = this.afStore.collection('shoppingLists');
+    this.shoppingLists$ = this.slCollection.valueChanges();
     console.log('[SLService] About to subscribe to FB shoppingLists');
-    this.slCollection.valueChanges().subscribe(
+    this.shoppingLists$.subscribe(
       (shoppingLists: ShoppingList[]) => {
         if (shoppingLists) {
           console.log('[SLService] About to dispatch LoadShoppingListsSuccess action', shoppingLists);

@@ -7,6 +7,8 @@ export const LOAD_SHOPPING_LISTS_SUCCESS = '[shopping list] Shopping Lists Loade
 export const LOAD_SHOPPING_LISTS_FAILURE = '[shopping list] Shopping Lists Not Loaded Successfully';
 export const ADD_SHOPPING_LIST = '[shopping list] Add Shopping';
 export const DELETE_SHOPPING_LIST = '[shopping list] Delete Shopping List';
+export const DELETE_SHOPPING_LIST_SUCCESS = '[shopping list] Shopping List Deleted Successfully';
+export const DELETE_SHOPPING_LIST_FAILURE = '[shopping list] Shopping List Not Deleted Successfully';
 
 export class LoadShoppingLists implements Action {
     readonly type = LOAD_SHOPPING_LISTS;
@@ -32,9 +34,21 @@ export class DeleteShoppingList implements Action {
     constructor (public payload: ShoppingList) {} // ShoppingList object to be deleted
 }
 
+export class DeleteShoppingListSuccess implements Action {
+    readonly type = DELETE_SHOPPING_LIST_SUCCESS;
+    constructor (public payload: ShoppingList) {} // ShoppingList object to be deleted
+}
+
+export class DeleteShoppingListFailure implements Action {
+    readonly type = DELETE_SHOPPING_LIST_FAILURE;
+    constructor (public payload: ShoppingList) {} // ShoppingList object to be deleted
+}
+
 export type Actions =
     LoadShoppingLists |
     LoadShoppingListsSuccess |
     LoadShoppingListsFailure |
     AddShoppingList |
-    DeleteShoppingList;
+    DeleteShoppingList |
+    DeleteShoppingListSuccess |
+    DeleteShoppingListFailure ;

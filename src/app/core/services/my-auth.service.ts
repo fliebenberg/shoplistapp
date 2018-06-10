@@ -1,3 +1,5 @@
+import { MyUserService } from './../../user/my-user.service';
+import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { FirebaseApp } from 'angularfire2';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -5,6 +7,8 @@ import * as firebase from 'firebase';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MyMessageService, MessageType } from './my-message.service';
+import * as UserActions from './../../user/store/user.actions';
+import { UserState } from '../../user/store/user.reducer';
 
 
 @Injectable({
@@ -18,10 +22,16 @@ export class MyAuthService {
     public app: FirebaseApp,
     public afAuth: AngularFireAuth,
     public router: Router,
+    public store: Store<UserState>,
+    public userService: MyUserService,
     public messageService: MyMessageService
   ) {
     this.afAuth.authState.subscribe(auth => {
       this.authState = auth;
+      if (this.authState && this.authState.uid) {
+        console.log('[AuthService] Calling Action LOAD_USER', this.authState);
+        this.store.dispatch(new UserActions.LoadUser(this.authState));
+      }
     });
     this.$authState = afAuth.authState;
   }
@@ -47,6 +57,7 @@ export class MyAuthService {
         console.log('New user registered: ', credential);
         this.messageService.addMessage('New user registered', MessageType.success);
         this.authState = credential;
+
         return credential;
 
       }
@@ -68,26 +79,27 @@ export class MyAuthService {
     console.log ("Logging in with Google...");
     const provider = new firebase.auth.GoogleAuthProvider();
     return this.socialLogin(provider);
-   }
+  }
 
-   logInFacebook() {
+  logInFacebook() {
     console.log ("Logging in with Facebook...");
     const provider = new firebase.auth.FacebookAuthProvider();
     return this.socialLogin(provider);
-   }
+  }
 
   // logInTwitter() {
-  //   console.log ("Logging in with Twitter...");
-  //   const provider = new firebase.auth.TwitterAuthProvider();
-  //   return this.socialLogin(provider);
-  //  }
+    //   console.log ("Logging in with Twitter...");
+    //   const provider = new firebase.auth.TwitterAuthProvider();
+    //   return this.socialLogin(provider);
+    //  }
 
   private socialLogin(provider) {
     return this.afAuth.auth.signInWithPopup(provider).then(
       credential => {
         this.authState = credential.user;
         return credential;
-      });
+      }
+    );
   }
 
   logOut(route?: string) {

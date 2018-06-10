@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { MyAuthService } from '../../core/services/my-auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Store } from '@ngrx/store';
+// import { DomSanitizer } from '@angular/platform-browser';
+import { MyAuthService } from '../../core/services/my-auth.service';
+import { MyUserService } from '../my-user.service';
+import { UserState } from '../store/user.reducer';
+import * as UserActions from './../store/user.actions';
 
 @Component({
   selector: 'app-user-login',
@@ -19,7 +23,13 @@ export class UserLoginComponent implements OnInit {
   showFacebook = true;
   showEmailPassword = true;
 
-  constructor(public authService: MyAuthService, public router: Router, public route: ActivatedRoute) { }
+  constructor(
+    public authService: MyAuthService,
+    public userService: MyUserService,
+    public store: Store<UserState>,
+    public router: Router,
+    public route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.route.data.subscribe((data: {signUp: boolean}) => {
@@ -59,6 +69,7 @@ export class UserLoginComponent implements OnInit {
     console.log('Signing up new user with email and password');
     this.authService.signupEmailPassword(email, password).then(() => {
       this.errorMsg = '';
+      this.store.dispatch(new UserActions.AddUser(this.authService.currentUser.uid));
       this.authService.currentUser.updateProfile({displayName: name}).then(() => {
         console.log('Successfully set user displayname to ' + this.authService.currentUser.displayName);
       }).catch((error) => {
@@ -73,8 +84,9 @@ export class UserLoginComponent implements OnInit {
 
   loginEmailPassword(email: string, password: string) {
     console.log('Logging in user with his email and password:' + email + '|' + password);
-    this.authService.loginEmailPassword(email, password).then(() => {
+    this.authService.loginEmailPassword(email, password).then((credential) => {
       this.errorMsg = '';
+      this.store.dispatch(new UserActions.LoadUser(credential.uid));
       if (this.newProviderCredential) {
         this.linkNewProvider();
       }

@@ -7,8 +7,8 @@ import { ShoppingListsState, getSLArray } from '../store/shopping-list.reducer';
 import { ShoppingList } from '../models/shopping-list.model';
 
 @Component({
-  selector: 'app-view-shopping-lists',
-  templateUrl: './view-shopping-lists.component.html',
+  selector: 'app-shopping-lists',
+  templateUrl: './shopping-lists.component.html',
 })
 export class ViewShoppingListsComponent implements OnInit {
   shoppingLists$: Observable<ShoppingList[]>;
