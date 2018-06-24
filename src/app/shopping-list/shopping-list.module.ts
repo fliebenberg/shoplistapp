@@ -17,7 +17,7 @@ import { ShoppingListViewComponent } from './components/shopping-list-view.compo
     FormsModule,
     AppRoutingModule,
     StoreModule.forFeature('shoppingListsState', shoppingListReducer),
-    // EffectsModule.forFeature([ShoppingListEffects]),
+    EffectsModule.forFeature([ShoppingListEffects]),
   ],
   declarations: [EditShoppingListComponent, ViewShoppingListsComponent, ShoppingListViewComponent]
 })

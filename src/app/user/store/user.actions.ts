@@ -8,6 +8,7 @@ export const LOAD_USER_FAILURE = '[user] User Not Loaded Successfully';
 export const ADD_USER = '[user] Add User';
 export const ADD_USER_SUCCESS = '[user] User Added Succesfully';
 export const ADD_USER_FAILURE = '[user] User Not Added Succesfully';
+export const CLEAR_USER = '[user] Clear user (User logged out)';
 export const DELETE_USER = '[user] Delete User';
 export const DELETE_USER_SUCCESS = '[user] User Deleted Successfully';
 export const DELETE_USER_FAILURE = '[user] User Not Deleted Successfully';
@@ -42,6 +43,10 @@ export class AddUserFailure implements Action {
     constructor (public payload: any) {} // error
 }
 
+export class ClearUser implements Action {
+    readonly type = CLEAR_USER;
+}
+
 export class DeleteUser implements Action {
     readonly type = DELETE_USER;
     constructor (public payload: User) {} // ShoppingList object to be deleted
@@ -64,6 +69,7 @@ export type Actions =
     AddUser |
     AddUserSuccess |
     AddUserFailure |
+    ClearUser |
     DeleteUser |
     DeleteUserSuccess |
     DeleteUserFailure ;

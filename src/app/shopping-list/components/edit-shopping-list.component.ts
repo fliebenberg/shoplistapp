@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { firestore } from 'firebase/app';
 import { MyShoppingListService } from '../my-shopping-list.service';
@@ -9,9 +10,10 @@ import { ShoppingList } from './../models/shopping-list.model';
   selector: 'app-edit-shopping-list',
   templateUrl: './edit-shopping-list.component.html'
 })
-export class EditShoppingListComponent implements OnInit {
+export class EditShoppingListComponent implements OnInit, OnDestroy {
   shoppingList: ShoppingList;
   editMode = false;
+  paramSub: Subscription;
 
   constructor(
     public slService: MyShoppingListService,
@@ -25,9 +27,9 @@ export class EditShoppingListComponent implements OnInit {
       console.log('[EditSLComponent] Shopping Lists have not been loaded. Redirecting to Shopping List View.');
       this.router.navigate(['/lists']);
     } else {
-      this.shoppingList = new ShoppingList();
+      this.shoppingList = this.slService.createNewSL();
       console.log('New shopping list created.', this.shoppingList);
-      this.route.paramMap.subscribe(params => {
+      this.paramSub = this.route.paramMap.subscribe(params => {
         const paramId = params.get('id');
         if (paramId) {
           const foundSL = this.slService.getShoppingList(paramId);
@@ -57,4 +59,7 @@ export class EditShoppingListComponent implements OnInit {
     this.router.navigate(['/lists']);
   }
 
+  ngOnDestroy() {
+    this.paramSub.unsubscribe();
+  }
 }

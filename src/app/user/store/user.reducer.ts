@@ -42,6 +42,10 @@ export function userReducer(state = initialSLState, action: UserActions.Actions)
       console.log('[UserReducer] Action ADD_USER_FAILURE called', action.payload);
       return {...state, updating: true};
     }
+    case UserActions.CLEAR_USER: {
+      console.log('[UserReducer] Action CLEAR_USER called');
+      return {...state, user: null};
+    }
     case UserActions.DELETE_USER: {
       console.log('[UserReducer] Action DELETE_USER called', action.payload);
       return {...state, deleting: true};
@@ -51,7 +55,7 @@ export function userReducer(state = initialSLState, action: UserActions.Actions)
       return {...state, deleting: false};
     }
     default: {
-      console.log('[UserReducer] Unhandled action', action);
+      // console.log('[UserReducer] Unhandled action', action);
       return state;
     }
   }

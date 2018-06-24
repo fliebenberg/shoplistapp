@@ -12,6 +12,7 @@ export const DELETE_SHOPPING_LIST_FAILURE = '[shopping list] Shopping List Not D
 
 export class LoadShoppingLists implements Action {
     readonly type = LOAD_SHOPPING_LISTS;
+    constructor (public payload: any[]) {} // list of shoppingList objects from firebase
 }
 
 export class LoadShoppingListsSuccess implements Action {

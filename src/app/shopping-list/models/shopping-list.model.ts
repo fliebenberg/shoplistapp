@@ -7,6 +7,7 @@ export class ShoppingList {
     public name: string = '',
     public description: string = '',
     public dateCreated: firestore.Timestamp = firestore.Timestamp.now(),
+    public users = {},
     public itemsList: ListItem[] = [],
     public quickLists: string[] = []
   ) { }

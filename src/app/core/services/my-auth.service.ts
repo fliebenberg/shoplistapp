@@ -105,6 +105,7 @@ export class MyAuthService {
   logOut(route?: string) {
     this.afAuth.auth.signOut().then(() => {
       if (route) { this.router.navigate([route]); }
+      this.store.dispatch(new UserActions.ClearUser());
       this.messageService.addMessage('User succesfully logged out.', MessageType.info);
     });
   }

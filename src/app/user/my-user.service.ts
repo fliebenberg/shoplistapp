@@ -34,7 +34,7 @@ export class MyUserService {
       if (userObject.lastName) { newUser.lastName = userObject.lastName; }
       if (userObject.email) { newUser.email = userObject.email; }
       if (userObject.photoUrl) { newUser.photoUrl = userObject.photoUrl; }
-      if (userObject.shoppingLists) { newUser.shoppingLists = userObject.shoppingLists; }
+      // if (userObject.shoppingLists) { newUser.shoppingLists = userObject.shoppingLists; }
     }
     console.log('[UserService] createUser newUser: ', newUser);
     return newUser;

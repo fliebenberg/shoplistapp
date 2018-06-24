@@ -45,7 +45,7 @@ export function itemsReducer(state = initialItemsState, action: ItemsActions.Act
         return {...state, selectedItem: action.payload};
       }
       default: {
-        console.log('[ItemsReducer] Unhandled action', action);
+        // console.log('[ItemsReducer] Unhandled action', action);
         return state;
       }
     }

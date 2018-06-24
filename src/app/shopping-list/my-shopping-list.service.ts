@@ -1,54 +1,111 @@
+import { switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { firestore } from 'firebase/app';
 import { ShoppingList } from './models/shopping-list.model';
-import { ShoppingListsState, getSLLoading } from './store/shopping-list.reducer';
+import { ShoppingListsState, getSLLoading, getSLArray } from './store/shopping-list.reducer';
 import * as SLActions from './store/shopping-list.actions';
+import { UserState, getUser } from '../user/store/user.reducer';
+import { User } from './../user/models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MyShoppingListService {
   slCollection: AngularFirestoreCollection<ShoppingList>;
-  shoppingLists$: Observable<ShoppingList[]>;
+  // shoppingLists$: Observable<ShoppingList[]>;
   slMap: Map<string, ShoppingList>;
   slLoading = true;
+  user$: Observable<User>;
+  user: User;
 
   constructor(
     private afStore: AngularFirestore,
-    private store: Store<ShoppingListsState>) {
+    private slStore: Store<ShoppingListsState>,
+    private userStore: Store<UserState>) {
       this.afStore.firestore.settings({timestampsInSnapshots: true});  // needed to set this to take account of changes in firestore
-      this.fbShoppingListsSubscribe();
-    }
-
-  fbShoppingListsSubscribe() {
-    this.store.select(getSLLoading).subscribe(loading => {
-      this.slLoading = loading;
-    });
-    this.slCollection = this.afStore.collection('shoppingLists');
-    this.shoppingLists$ = this.slCollection.valueChanges();
-    console.log('[SLService] About to subscribe to FB shoppingLists');
-    this.shoppingLists$.subscribe(
-      (shoppingLists: ShoppingList[]) => {
-        if (shoppingLists) {
-          console.log('[SLService] About to dispatch LoadShoppingListsSuccess action', shoppingLists);
-          this.store.dispatch(new SLActions.LoadShoppingListsSuccess(shoppingLists));
-          this.slMap = new Map();
-          shoppingLists.forEach((shoppingList: ShoppingList) => {
-            this.slMap.set(shoppingList.id, shoppingList);
-          });
+      this.slCollection = this.afStore.collection('shoppingLists');
+      this.userStore.select(getUser).subscribe((user: User) => {
+        console.log('[SLService] user:', user);
+        this.user = user;
+        if (user) {
+          console.log('[SLService] Before loading ShoppingLists for userID:' + user.id);
+          this.afStore.collection('shoppingLists', ref => ref.where('users.' + user.id, '==', 'owner')).valueChanges()
+            .subscribe(slAsOwner => {
+              console.log('[SLService] calling action LOAD_SHOPPINGLISTS', slAsOwner);
+              const slCombined = [...slAsOwner];
+              this.slStore.dispatch(new SLActions.LoadShoppingLists(slCombined));
+            });
         } else {
-          console.log('[SLService] Could not load ShoppingLists');
+            console.log('[SLService] No user loaded', user);
+            this.slStore.dispatch( new SLActions.LoadShoppingListsFailure('No user loaded...'));
         }
-      },
-      (error) => {
-        console.log('[SLService] About to dis[atch LoadShoppingListsFailure action');
-        this.store.dispatch(new SLActions.LoadShoppingListsFailure(error));
-      }
-    );
+      });
+      console.log('[SLService] Testing...');
+      this.slStore.select(getSLArray).subscribe(shoppingLists => {
+        this.slMap = this.createSLMap(shoppingLists);
+      });
+      this.slStore.select(getSLLoading).subscribe(loading => {
+        this.slLoading = loading;
+      });
   }
+  // function to create a ShoppingList item from a shopping list object loaded from Firebase
+  createShoppingList(slObject: any): ShoppingList {
+    console.log('[slService] createShoppingList slObject:', slObject);
+    const newSL = new ShoppingList();
+    if (slObject) {
+      if (slObject.id) { newSL.id = slObject.id; }
+      if (slObject.name) { newSL.name = slObject.name; }
+      if (slObject.description) { newSL.description = slObject.description; }
+      if (slObject.dateCreated) { newSL.dateCreated = slObject.dateCreated; }
+      if (slObject.users) { newSL.users = slObject.users; }
+    }
+    console.log('[slService] createShoppingList newSL:', newSL);
+    return newSL;
+  }
+
+  createNewSL(): ShoppingList {
+    const newSL = new ShoppingList();
+    if (this.user) {
+      newSL.users[this.user.id] = 'owner';
+    }
+    return newSL;
+  }
+
+  createSLMap(shoppingLists: ShoppingList[]): Map<string, ShoppingList> {
+    const newMap = new Map();
+    shoppingLists.forEach((shoppingList: ShoppingList) => {
+      newMap.set(shoppingList.id, shoppingList);
+    });
+    return newMap;
+  }
+  // fbShoppingListsSubscribe() {
+  //   this.store.select(getSLLoading).subscribe(loading => {
+  //     this.slLoading = loading;
+  //   });
+  //   this.shoppingLists$ = this.slCollection.valueChanges();
+  //   console.log('[SLService] About to subscribe to FB shoppingLists');
+  //   this.shoppingLists$.subscribe(
+  //     (shoppingLists: ShoppingList[]) => {
+  //       if (shoppingLists) {
+  //         console.log('[SLService] About to dispatch LoadShoppingListsSuccess action', shoppingLists);
+  //         this.store.dispatch(new SLActions.LoadShoppingListsSuccess(shoppingLists));
+  //         this.slMap = new Map();
+  //         shoppingLists.forEach((shoppingList: ShoppingList) => {
+  //           this.slMap.set(shoppingList.id, shoppingList);
+  //         });
+  //       } else {
+  //         console.log('[SLService] Could not load ShoppingLists');
+  //       }
+  //     },
+  //     (error) => {
+  //       console.log('[SLService] About to dis[atch LoadShoppingListsFailure action');
+  //       this.store.dispatch(new SLActions.LoadShoppingListsFailure(error));
+  //     }
+  //   );
+  // }
 
   getShoppingList(slId: string): ShoppingList {
     let foundSL = null;
