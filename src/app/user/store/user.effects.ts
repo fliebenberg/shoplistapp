@@ -15,7 +15,7 @@ export class UserEffects {
   addUser$: Observable<Action> = this.actions$.pipe(
       ofType(UserActions.ADD_USER),
       switchMap((action: UserActions.AddUser) => {
-          const newUser = this.userService.createUser(action.payload);
+          const newUser = this.userService.convertToUser(action.payload);
           return this.userService.usersCollection.doc(newUser.id).set({...newUser})
             .then(() => {
                 console.log('[UserEffects] Effect AddUser Calling Action AddUserSuccess');
@@ -32,12 +32,12 @@ export class UserEffects {
   loadUser$: Observable<Action> = this.actions$
     .ofType(UserActions.LOAD_USER)
     .switchMap((action: UserActions.LoadUser) => {
-      const newUser = this.userService.createUser(action.payload);
+      const newUser = this.userService.convertToUser(action.payload);
       return this.userService.usersCollection.doc(newUser.id).valueChanges().pipe(
         map((user: any) => {
             if (user) {
               console.log('[UserEffects] Effect LoadUser Calling Action LoadUserSuccess', action.payload);
-              return new UserActions.LoadUserSuccess(this.userService.createUser(user));
+              return new UserActions.LoadUserSuccess(this.userService.convertToUser(user));
             } else {
               console.log('[UserEffects] Effect LoadUser calling Action AddUser', action.payload);
               return new UserActions.AddUser(newUser);

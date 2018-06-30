@@ -23,8 +23,8 @@ export class MyUserService {
     this.usersCollection = this.afStore.collection('users');
   }
 
-  createUser(userObject: any): User {
-    console.log('[UserService] createUser userObject: ', userObject);
+  convertToUser(userObject: any): User {
+    // console.log('[UserService] convertToUser userObject: ', userObject);
     const newUser = new User();
     if (userObject) {
       if (userObject.id) { newUser.id = userObject.id; } else {
@@ -36,7 +36,7 @@ export class MyUserService {
       if (userObject.photoUrl) { newUser.photoUrl = userObject.photoUrl; }
       // if (userObject.shoppingLists) { newUser.shoppingLists = userObject.shoppingLists; }
     }
-    console.log('[UserService] createUser newUser: ', newUser);
+    // console.log('[UserService] convertToUser newUser: ', newUser);
     return newUser;
   }
 

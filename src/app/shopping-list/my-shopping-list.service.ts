@@ -31,7 +31,7 @@ export class MyShoppingListService {
         console.log('[SLService] user:', user);
         this.user = user;
         if (user) {
-          console.log('[SLService] Before loading ShoppingLists for userID:' + user.id);
+          // console.log('[SLService] Before loading ShoppingLists for userID:' + user.id);
           this.afStore.collection('shoppingLists', ref => ref.where('users.' + user.id, '==', 'owner')).valueChanges()
             .subscribe(slAsOwner => {
               console.log('[SLService] calling action LOAD_SHOPPINGLISTS', slAsOwner);
@@ -40,7 +40,7 @@ export class MyShoppingListService {
             });
         } else {
             console.log('[SLService] No user loaded', user);
-            this.slStore.dispatch( new SLActions.LoadShoppingListsFailure('No user loaded...'));
+            // this.slStore.dispatch( new SLActions.LoadShoppingListsFailure('No user loaded...'));
         }
       });
       console.log('[SLService] Testing...');
@@ -52,8 +52,8 @@ export class MyShoppingListService {
       });
   }
   // function to create a ShoppingList item from a shopping list object loaded from Firebase
-  createShoppingList(slObject: any): ShoppingList {
-    console.log('[slService] createShoppingList slObject:', slObject);
+  convertToSL(slObject: any): ShoppingList {
+    // console.log('[slService] covertToSL slObject:', slObject);
     const newSL = new ShoppingList();
     if (slObject) {
       if (slObject.id) { newSL.id = slObject.id; }
@@ -62,7 +62,7 @@ export class MyShoppingListService {
       if (slObject.dateCreated) { newSL.dateCreated = slObject.dateCreated; }
       if (slObject.users) { newSL.users = slObject.users; }
     }
-    console.log('[slService] createShoppingList newSL:', newSL);
+    // console.log('[slService] covertToSL newSL:', newSL);
     return newSL;
   }
 
@@ -71,6 +71,7 @@ export class MyShoppingListService {
     if (this.user) {
       newSL.users[this.user.id] = 'owner';
     }
+    newSL.name = this.formatDate(newSL.dateCreated);
     return newSL;
   }
 
@@ -81,31 +82,6 @@ export class MyShoppingListService {
     });
     return newMap;
   }
-  // fbShoppingListsSubscribe() {
-  //   this.store.select(getSLLoading).subscribe(loading => {
-  //     this.slLoading = loading;
-  //   });
-  //   this.shoppingLists$ = this.slCollection.valueChanges();
-  //   console.log('[SLService] About to subscribe to FB shoppingLists');
-  //   this.shoppingLists$.subscribe(
-  //     (shoppingLists: ShoppingList[]) => {
-  //       if (shoppingLists) {
-  //         console.log('[SLService] About to dispatch LoadShoppingListsSuccess action', shoppingLists);
-  //         this.store.dispatch(new SLActions.LoadShoppingListsSuccess(shoppingLists));
-  //         this.slMap = new Map();
-  //         shoppingLists.forEach((shoppingList: ShoppingList) => {
-  //           this.slMap.set(shoppingList.id, shoppingList);
-  //         });
-  //       } else {
-  //         console.log('[SLService] Could not load ShoppingLists');
-  //       }
-  //     },
-  //     (error) => {
-  //       console.log('[SLService] About to dis[atch LoadShoppingListsFailure action');
-  //       this.store.dispatch(new SLActions.LoadShoppingListsFailure(error));
-  //     }
-  //   );
-  // }
 
   getShoppingList(slId: string): ShoppingList {
     let foundSL = null;
@@ -118,7 +94,7 @@ export class MyShoppingListService {
   }
 
   saveShoppingList(shoppingList: ShoppingList): Promise<any> {
-    console.log('[SLService][saveList] Saving Shopping List to firebase', shoppingList);
+    // console.log('[SLService][saveList] Saving Shopping List to firebase', shoppingList);
     if (!shoppingList.id || shoppingList.id.length === 0) {
       shoppingList.id = this.afStore.createId();
       console.log('[SLService][saveList] New id created: ' + shoppingList.id);
