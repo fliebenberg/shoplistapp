@@ -1,3 +1,4 @@
+import { Item } from './../../items/models/item.model';
 import { MyAuthService } from './../../core/services/my-auth.service';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';

@@ -1,9 +1,11 @@
+import { MyUserService } from './../../../user/my-user.service';
+import { UserState } from './../../../user/store/user.reducer';
 import { Observable, Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { MyItemsService } from '../../my-items.service';
 import { Store } from '@ngrx/store';
 import { ItemsState, getCategoriesMap } from './../../store/items.reducer';
-import * as ItemsActions from './../../store/items.actions';
+import * as UserActions from './../../../user/store/user.actions';
 
 @Component({
   selector: 'app-categories-filter',
@@ -15,10 +17,13 @@ export class CategoriesFilterComponent implements OnInit {
   categoriesArray: string[]; // Array of category names
 
 
-  constructor(public itemService: MyItemsService, public store: Store<ItemsState>) { }
+  constructor(
+    public itemService: MyItemsService,
+    public itemsStore: Store<ItemsState>,
+    public userService: MyUserService) { }
 
   ngOnInit() {
-    this.categoriesSub = this.store.select(getCategoriesMap).subscribe(categoriesMap => {
+    this.categoriesSub = this.itemsStore.select(getCategoriesMap).subscribe(categoriesMap => {
       this.categoriesMap = categoriesMap;
       this.categoriesArray = Array.from(this.categoriesMap.keys());
     });
@@ -36,7 +41,7 @@ export class CategoriesFilterComponent implements OnInit {
   }
 
   toggleCategory(category: string) {
-    this.store.dispatch(new ItemsActions.ToggleCategoryInclude(category));
+    this.userService.toggleExcludeCategory(category);
   }
 
 }

@@ -42,6 +42,18 @@ export function userReducer(state = initialSLState, action: UserActions.Actions)
       console.log('[UserReducer] Action ADD_USER_FAILURE called', action.payload);
       return {...state, updating: true};
     }
+    case UserActions.UPDATE_USER: {
+      console.log('[UserReducer] Action UPDATE_USER called', action.payload);
+      return {...state, updating: true};
+    }
+    case UserActions.UPDATE_USER_SUCCESS: {
+      console.log('[UserReducer] Action UPDATE_USER_SUCCESS called', action.payload);
+      return {...state, updating: false};
+    }
+    case UserActions.UPDATE_USER_FAILURE: {
+      console.log('[UserReducer] Action UPDATE_USER_FAILURE called', action.payload);
+      return {...state, updating: false};
+    }
     case UserActions.CLEAR_USER: {
       console.log('[UserReducer] Action CLEAR_USER called');
       return {...state, user: null};
@@ -53,6 +65,24 @@ export function userReducer(state = initialSLState, action: UserActions.Actions)
     case UserActions.DELETE_USER_SUCCESS: {
       console.log('[UserReducer] Action DELETE_USER_SUCCESS called', action.payload);
       return {...state, deleting: false};
+    }
+    case UserActions.TOGGLE_EXCLUDE_CATEGORY: {
+      console.log('[UserReducer] Action TOGGLE_EXCLUDE_CATEGORY called', action.payload);
+      return {...state, user: action.payload.user};
+    }
+    case UserActions.ADD_EXCLUDE_CATEGORY: {
+      console.log('[UserReducer] Action ADD_EXCLUDE_CATEGORY called', action.payload);
+      const tempUser = {...state.user};
+      if (!tempUser.excludeCategories.includes(action.payload)) { tempUser.excludeCategories.push(action.payload); }
+      return {...state, user: tempUser};
+    }
+    case UserActions.DELETE_EXCLUDE_CATEGORY: {
+      console.log('[UserReducer] Action DELETE_EXCLUDE_CATEGORY called', action.payload);
+      const tempUser = {...state.user};
+      tempUser.excludeCategories = tempUser.excludeCategories.filter(category => {
+          return category !== action.payload;
+        });
+      return {...state, user: tempUser};
     }
     default: {
       // console.log('[UserReducer] Unhandled action', action);

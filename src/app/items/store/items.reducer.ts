@@ -35,11 +35,11 @@ export function itemsReducer(state = initialItemsState, action: ItemsActions.Act
         console.log('[ItemsReducer] Action UPDATE_CATEGORIES called', state, action.payload);
         return {...state, categories: action.payload};
       }
-      case ItemsActions.TOGGLE_CATEGORY_INCLUDE: {
-        console.log('[ItemsReducer] Action TOGGLE_CATEGORY_INCLUDE called', state, action.payload);
-        const newCategoriesMap = new Map(state.categories.set(action.payload, !state.categories.get(action.payload)));
-        return {...state, categories: newCategoriesMap};
-      }
+      // case ItemsActions.TOGGLE_CATEGORY_INCLUDE: {
+      //   console.log('[ItemsReducer] Action TOGGLE_CATEGORY_INCLUDE called', state, action.payload);
+      //   const newCategoriesMap = new Map(state.categories.set(action.payload, !state.categories.get(action.payload)));
+      //   return {...state, categories: newCategoriesMap};
+      // }
       case ItemsActions.SET_SELECTED_ITEM: {
         console.log('[ItemsReducer] Action SET_SELECTED_ITEM called', state, action.payload);
         return {...state, selectedItem: action.payload};

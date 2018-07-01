@@ -1,6 +1,7 @@
+import { UserState, getUser } from './../user/store/user.reducer';
 import { Injectable, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable, throwError, Subject } from 'rxjs';
+import { Observable, throwError, Subject, combineLatest } from 'rxjs';
 
 import { Item } from './models/item.model';
 import { Store } from '@ngrx/store';
@@ -22,6 +23,7 @@ export class MyItemsService {
   // filteredItems: Item[] = [];
   // filteredItemsSubject = new Subject<Item[]>();
   categoriesMap: Map<string, boolean> = new Map();
+  excludeCategories: string[] = [];
   // filters = {
   //   searchFilter: '',
   //   categoryFilter: ['']
@@ -29,7 +31,8 @@ export class MyItemsService {
 
   constructor(
     public afStore: AngularFirestore,
-    public store: Store<ItemsState>,
+    public itemsStore: Store<ItemsState>,
+    public userStore: Store<UserState>,
     public messageService: MyMessageService
   ) {
     this.afStore.firestore.settings({timestampsInSnapshots: true});  // needed to set this to take account of changes in firestore
@@ -38,17 +41,26 @@ export class MyItemsService {
   }
 
   fbItemsSubscribe() {
-    this.store.select(getLoading).subscribe(loading => {
+    this.itemsStore.select(getLoading).subscribe(loading => {
       this.loadingItems = loading;
     });
+    this.userStore.select(getUser).subscribe(user => {
+      if (user && user.excludeCategories) {
+        this.excludeCategories = user.excludeCategories;
+      } else {
+        this.excludeCategories = [];
+      }
+      console.log('ItemsService] Updating categories because of user change', user, this.excludeCategories);
+      this.itemsStore.dispatch(new ItemsActions.UpdateCategories(this.updateCategories(this.items, this.excludeCategories)));
+    });
     this.itemsCollection = this.afStore.collection('items');
-    this.fbItems$ = this.itemsCollection.valueChanges();
     console.log('[ItemsService] About to subscribe to firebase...');
+    this.fbItems$ = this.itemsCollection.valueChanges();
     this.fbItems$.subscribe(
-      items => {
+      (items) => {
         console.log('[ItemsService] About to dispatch action LoadItemsSuccess');
-        this.store.dispatch(new ItemsActions.LoadItemsSuccess(items));
-        // this.items = items;
+        this.itemsStore.dispatch(new ItemsActions.LoadItemsSuccess(items));
+        this.items = items;
         this.itemsMap = new Map();
         items.forEach(item => {
           this.itemsMap.set(item.id, item);
@@ -56,7 +68,7 @@ export class MyItemsService {
       },
       error => {
         console.log('[ItemsService] About to dispatch action LoadItemsFailure', error);
-        this.store.dispatch(new ItemsActions.LoadItemsFailure(error));
+        this.itemsStore.dispatch(new ItemsActions.LoadItemsFailure(error));
       }
     );
   }
@@ -103,18 +115,23 @@ export class MyItemsService {
     });
   }
 
-  updateCategories(items: Item[], categories?: Map<string, boolean>): Map<string, boolean> {
+  updateCategories(items: Item[], excludeCategories?: string[]): Map<string, boolean> {
+    console.log('[ItemsService] updateCategories starting', excludeCategories);
     const tempCategories = [];
-    items.map(item => {
+    items.forEach(item => {
       if (!tempCategories.includes(item.category)) {
         tempCategories.push(item.category);
       }
     });
+    console.log('[ItemsService] updateCategories step 2', tempCategories);
     const tempCategoriesMap = new Map();
     tempCategories.sort().forEach(category => {
-      if (categories && categories.get(category) !== undefined) {
-        tempCategoriesMap.set(category, categories.get(category));
+      console.log('[ItemsService] updateCategories : current category: ' + category);
+      if (excludeCategories && excludeCategories.includes(category)) {
+        console.log('[ItemsService] updateCategories : excluding category ' + category);
+        tempCategoriesMap.set(category, false);
       } else {
+        console.log('[ItemsService] updateCategories : including category ' + category);
         tempCategoriesMap.set(category, true);
       }
     });

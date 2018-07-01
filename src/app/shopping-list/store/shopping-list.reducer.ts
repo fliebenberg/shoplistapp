@@ -58,6 +58,10 @@ export function shoppingListReducer(state = initialSLState, action: SLActions.Ac
       console.log('[ShoppingListReducer] Action DELETE_SHOPPING_LIST_FAILURE called', action.payload);
       return {...state, deleting: false};
     }
+    case SLActions.CLEAR_SHOPPING_LISTS: {
+      console.log('[ShoppingListReducer] Action CLEAR_SHOPPING_LISTS called');
+      return {...state, shoppingLists: []};
+    }
     case SLActions.UPDATE_SHOPPING_LIST: {
       console.log('[ShoppingListReducer] Action UPDATE_SHOPPING_LIST called', action.payload);
       return {...state, updating: true};

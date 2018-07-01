@@ -11,10 +11,12 @@ export const ADD_SHOPPING_LIST_FAILURE = '[shopping list] Shopping List Not Adde
 export const DELETE_SHOPPING_LIST = '[shopping list] Delete Shopping List';
 export const DELETE_SHOPPING_LIST_SUCCESS = '[shopping list] Shopping List Deleted Successfully';
 export const DELETE_SHOPPING_LIST_FAILURE = '[shopping list] Shopping List Not Deleted Successfully';
+export const CLEAR_SHOPPING_LISTS = '[shopping list] Clear all shopping lists from store';
 export const UPDATE_SHOPPING_LIST = '[shopping list] Update Shopping List';
 export const UPDATE_SHOPPING_LIST_SUCCESS = '[shopping list] Shopping List Updated Successfully';
 export const UPDATE_SHOPPING_LIST_FAILURE = '[shopping list] Shopping List Not Updated Successfully';
 export const SET_CURRENT_SHOPPING_LIST = '[shopping list] Set Current Shopping List';
+export const LOAD_SL_ITEMS = '[shopping list] Load items for the specified Shopping List';
 
 export class LoadShoppingLists implements Action {
     readonly type = LOAD_SHOPPING_LISTS;
@@ -61,6 +63,11 @@ export class DeleteShoppingListFailure implements Action {
     constructor (public payload: ShoppingList) {} // ShoppingList to be deleted
 }
 
+export class ClearShoppingLists implements Action {
+    readonly type = CLEAR_SHOPPING_LISTS;
+    // constructor (public payload: ShoppingList) {} // ShoppingList to be deleted
+}
+
 export class UpdateShoppingList implements Action {
     readonly type = UPDATE_SHOPPING_LIST;
     constructor (public payload: ShoppingList) {} // ShoppingList to be updated
@@ -81,6 +88,11 @@ export class SetCurrentShoppingList implements Action {
     constructor (public payload: ShoppingList) {} // ShoppingList to set as current
 }
 
+export class LoadSLItems implements Action {
+    readonly type = LOAD_SL_ITEMS;
+    constructor (public payload: string) {} // ShoppingList id to load items fort
+}
+
 export type Actions =
     LoadShoppingLists |
     LoadShoppingListsSuccess |
@@ -91,7 +103,9 @@ export type Actions =
     DeleteShoppingList |
     DeleteShoppingListSuccess |
     DeleteShoppingListFailure |
+    ClearShoppingLists |
     UpdateShoppingList |
     UpdateShoppingListSuccess |
     UpdateShoppingListFailure |
-    SetCurrentShoppingList;
+    SetCurrentShoppingList |
+    LoadSLItems;

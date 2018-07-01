@@ -1,3 +1,4 @@
+import { MyAuthService } from './../core/services/my-auth.service';
 import { switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -19,7 +20,7 @@ export class MyShoppingListService {
   slMap: Map<string, ShoppingList>;
   slLoading = true;
   user$: Observable<User>;
-  user: User;
+  currentUserId: string;
 
   constructor(
     private afStore: AngularFirestore,
@@ -28,22 +29,22 @@ export class MyShoppingListService {
       this.afStore.firestore.settings({timestampsInSnapshots: true});  // needed to set this to take account of changes in firestore
       this.slCollection = this.afStore.collection('shoppingLists');
       this.userStore.select(getUser).subscribe((user: User) => {
-        console.log('[SLService] user:', user);
-        this.user = user;
         if (user) {
-          // console.log('[SLService] Before loading ShoppingLists for userID:' + user.id);
-          this.afStore.collection('shoppingLists', ref => ref.where('users.' + user.id, '==', 'owner')).valueChanges()
-            .subscribe(slAsOwner => {
-              console.log('[SLService] calling action LOAD_SHOPPINGLISTS', slAsOwner);
-              const slCombined = [...slAsOwner];
-              this.slStore.dispatch(new SLActions.LoadShoppingLists(slCombined));
-            });
+          if (user.id && user.id !== this.currentUserId) {
+            // console.log('[SLService] Before loading ShoppingLists for userID:' + user.id);
+            this.currentUserId = user.id;
+            this.afStore.collection('shoppingLists', ref => ref.where('users.' + user.id, '==', 'owner')).valueChanges()
+              .subscribe(slAsOwner => {
+                console.log('[SLService] calling action LOAD_SHOPPINGLISTS', slAsOwner);
+                const slCombined = [...slAsOwner];
+                this.slStore.dispatch(new SLActions.LoadShoppingLists(slCombined));
+              });
+          }
         } else {
             console.log('[SLService] No user loaded', user);
-            // this.slStore.dispatch( new SLActions.LoadShoppingListsFailure('No user loaded...'));
+            this.slStore.dispatch( new SLActions.LoadShoppingListsFailure('No user loaded...'));
         }
       });
-      console.log('[SLService] Testing...');
       this.slStore.select(getSLArray).subscribe(shoppingLists => {
         this.slMap = this.createSLMap(shoppingLists);
       });
@@ -56,11 +57,14 @@ export class MyShoppingListService {
     // console.log('[slService] covertToSL slObject:', slObject);
     const newSL = new ShoppingList();
     if (slObject) {
-      if (slObject.id) { newSL.id = slObject.id; }
+      if (slObject.id) {
+        newSL.id = slObject.id;
+      }
       if (slObject.name) { newSL.name = slObject.name; }
       if (slObject.description) { newSL.description = slObject.description; }
       if (slObject.dateCreated) { newSL.dateCreated = slObject.dateCreated; }
       if (slObject.users) { newSL.users = slObject.users; }
+      if (slObject.itemsList) { newSL.itemsList = slObject.itemsList; }
     }
     // console.log('[slService] covertToSL newSL:', newSL);
     return newSL;
@@ -68,8 +72,8 @@ export class MyShoppingListService {
 
   createNewSL(): ShoppingList {
     const newSL = new ShoppingList();
-    if (this.user) {
-      newSL.users[this.user.id] = 'owner';
+    if (this.currentUserId) {
+      newSL.users[this.currentUserId] = 'owner';
     }
     newSL.name = this.formatDate(newSL.dateCreated);
     return newSL;

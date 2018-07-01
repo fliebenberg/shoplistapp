@@ -32,7 +32,19 @@ const routes: Routes = [
   {path: 'item/:id/edit', component: ItemEditComponent},
   {path: 'lists', component: ViewShoppingListsComponent},
   {path: 'list/add', component: EditShoppingListComponent},
-  {path: 'list/:id', component: EditShoppingListComponent},
+  {path: 'list/:id', component: EditShoppingListComponent,
+    children: [
+      {path: '', redirectTo: 'items', pathMatch: 'full'},
+      {path: 'items', component: ItemListComponent},
+      {path: 'items/filters', component: ItemFiltersComponent,
+        children: [
+          {path: '', redirectTo: 'categories', pathMatch: 'full'},
+          {path: 'categories', component: CategoriesFilterComponent},
+          {path: 'providers', component: ProvidersFilterComponent}
+        ]
+      },
+    ]
+  },
   {path: '**', component: PageNotFoundComponent}
 ];
 
