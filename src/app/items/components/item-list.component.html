@@ -36,11 +36,16 @@
     <span class=''>
       {{item.name}}
     </span>
-    <div class="btn-group btn-group-sm float-right">
+    <div *ngIf='currentSL' class="btn-group btn-group-sm float-right">
+      <button class='btn btn-warning' (click)='addSLItem(item)'>
+        <i class='fas fa-cart-plus'></i>
+      </button>
+    </div>
+    <div *ngIf='allowEdit' class="btn-group btn-group-sm float-right">
       <button class='btn btn-success' routerLink='/item/{{item.id}}/edit'>
         <i class='fas fa-pencil-alt'></i>
       </button>
     </div>
   </div>
 </div>
-<button class="btn btn-success btn-block" (click)= 'addItem()'>New item</button>
+<button *ngIf='allowEdit' class="btn btn-success btn-block" (click)= 'addItem()'>New item</button>

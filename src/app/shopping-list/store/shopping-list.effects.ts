@@ -59,17 +59,35 @@ export class ShoppingListEffects {
   updateShoppingList$: Observable<Action> = this.actions$.pipe(
     ofType(SLActions.UPDATE_SHOPPING_LIST),
     switchMap((action: SLActions.UpdateShoppingList) => {
-      return this.SLService.saveShoppingList(action.payload)
+      const SLToUpdate: ShoppingList = this.SLService.getShoppingList(action.payload);
+      console.log('[SLEffects] Efect UPDATE_SHOPPING_LIST SLToUpdate:', SLToUpdate);
+      return this.SLService.saveShoppingList(SLToUpdate)
       .then(
         () => {
-          console.log('[SLEffects] Effect UPDATE_SHOPPING_LIST calling action UPDATE_SHOPPING_LIST_SUCCESS', action.payload);
-          return new SLActions.UpdateShoppingListSuccess(action.payload);
+          console.log('[SLEffects] Effect UPDATE_SHOPPING_LIST calling action UPDATE_SHOPPING_LIST_SUCCESS', SLToUpdate);
+          return new SLActions.UpdateShoppingListSuccess(SLToUpdate);
         },
         (error) => {
-          console.log('[SLEffects] Effect UPDATE_SHOPPING_LIST calling action UPDATE_SHOPPING_LIST_FAILURE', error, action.payload);
-          return new SLActions.UpdateShoppingListFailure(action.payload);
+          console.log('[SLEffects] Effect UPDATE_SHOPPING_LIST calling action UPDATE_SHOPPING_LIST_FAILURE', error, SLToUpdate);
+          return new SLActions.UpdateShoppingListFailure(SLToUpdate);
         }
       );
+    })
+  );
+  @Effect()
+  IncreaseSLItem$: Observable<Action> = this.actions$.pipe(
+    ofType(SLActions.INCREASE_SL_ITEM),
+    map((action: SLActions.IncreaseSLItem) => {
+      console.log('[SLEffects] Effect IncreaseSLItem calling action UPDATE_SHOPPING_LIST', action.payload.SL);
+      return new SLActions.UpdateShoppingList(action.payload.SL);
+    })
+  );
+  @Effect()
+  DecreaseSLItem$: Observable<Action> = this.actions$.pipe(
+    ofType(SLActions.DECREASE_SL_ITEM),
+    map((action: SLActions.DecreaseSLItem) => {
+      console.log('[SLEffects] Effect DecreaseSLItem calling action UPDATE_SHOPPING_LIST', action.payload.SL);
+      return new SLActions.UpdateShoppingList(action.payload.SL);
     })
   );
 

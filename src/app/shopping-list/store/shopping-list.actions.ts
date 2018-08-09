@@ -1,5 +1,6 @@
 import { ShoppingList } from './../models/shopping-list.model';
 import { Action } from "@ngrx/store";
+import { Item } from '../../items/models/item.model';
 
 // Load items list from Firebase
 export const LOAD_SHOPPING_LISTS = '[shopping list] Load Shopping Lists';
@@ -17,6 +18,8 @@ export const UPDATE_SHOPPING_LIST_SUCCESS = '[shopping list] Shopping List Updat
 export const UPDATE_SHOPPING_LIST_FAILURE = '[shopping list] Shopping List Not Updated Successfully';
 export const SET_CURRENT_SHOPPING_LIST = '[shopping list] Set Current Shopping List';
 export const LOAD_SL_ITEMS = '[shopping list] Load items for the specified Shopping List';
+export const INCREASE_SL_ITEM = '[shopping list] Increase item in the specified Shopping List';
+export const DECREASE_SL_ITEM = '[shopping list] Decrease item in the specified Shopping List';
 
 export class LoadShoppingLists implements Action {
     readonly type = LOAD_SHOPPING_LISTS;
@@ -70,7 +73,7 @@ export class ClearShoppingLists implements Action {
 
 export class UpdateShoppingList implements Action {
     readonly type = UPDATE_SHOPPING_LIST;
-    constructor (public payload: ShoppingList) {} // ShoppingList to be updated
+    constructor (public payload: string) {} // Id of ShoppingList to be updated
 }
 
 export class UpdateShoppingListSuccess implements Action {
@@ -93,6 +96,16 @@ export class LoadSLItems implements Action {
     constructor (public payload: string) {} // ShoppingList id to load items fort
 }
 
+export class IncreaseSLItem implements Action {
+    readonly type = INCREASE_SL_ITEM;
+    constructor (public payload: {item: Item, SL: string}) {} // Item to add to Shoppinglist, Id if shoppinglist
+}
+
+export class DecreaseSLItem implements Action {
+    readonly type = DECREASE_SL_ITEM;
+    constructor (public payload: {item: Item, SL: string}) {} // Item to add to Shoppinglist, Id if shoppinglist
+}
+
 export type Actions =
     LoadShoppingLists |
     LoadShoppingListsSuccess |
@@ -108,4 +121,6 @@ export type Actions =
     UpdateShoppingListSuccess |
     UpdateShoppingListFailure |
     SetCurrentShoppingList |
-    LoadSLItems;
+    LoadSLItems |
+    IncreaseSLItem |
+    DecreaseSLItem;

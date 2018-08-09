@@ -8,7 +8,8 @@ export class ShoppingList {
     public description: string = '',
     public dateCreated: firestore.Timestamp = firestore.Timestamp.now(),
     public users = {},
-    public itemsList: Map<string, ListItem> = null,
+    public itemsList: ListItem[] = [],
+    // public itemsListMap: Map<string, ListItem> = null,
     public noItems: number = 0,
     public quickLists: string[] = []
   ) { }

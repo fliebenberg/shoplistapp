@@ -10,6 +10,7 @@ import { ShoppingListsState, getSLLoading, getSLArray } from './store/shopping-l
 import * as SLActions from './store/shopping-list.actions';
 import { UserState, getUser } from '../user/store/user.reducer';
 import { User } from './../user/models/user.model';
+import { ListItem } from './models/list-item.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class MyShoppingListService {
       this.userStore.select(getUser).subscribe((user: User) => {
         if (user) {
           if (user.id && user.id !== this.currentUserId) {
-            // console.log('[SLService] Before loading ShoppingLists for userID:' + user.id);
+            console.log('[SLService] User changed: New UserId:' + user.id);
             this.currentUserId = user.id;
             this.afStore.collection('shoppingLists', ref => ref.where('users.' + user.id, '==', 'owner')).valueChanges()
               .subscribe(slAsOwner => {
@@ -47,6 +48,7 @@ export class MyShoppingListService {
       });
       this.slStore.select(getSLArray).subscribe(shoppingLists => {
         this.slMap = this.createSLMap(shoppingLists);
+        console.log('[SLService] slMap updated.', this.slMap);
       });
       this.slStore.select(getSLLoading).subscribe(loading => {
         this.slLoading = loading;
@@ -65,6 +67,11 @@ export class MyShoppingListService {
       if (slObject.dateCreated) { newSL.dateCreated = slObject.dateCreated; }
       if (slObject.users) { newSL.users = slObject.users; }
       if (slObject.itemsList) { newSL.itemsList = slObject.itemsList; }
+        // newSL.itemsList = new Map();
+        // slObject.itemsList.forEach((listItem: ListItem) => {
+        //   newSL.itemsList.set(listItem.item.id, listItem);
+        // })''
+      // }
     }
     // console.log('[slService] covertToSL newSL:', newSL);
     return newSL;
@@ -103,7 +110,14 @@ export class MyShoppingListService {
       shoppingList.id = this.afStore.createId();
       console.log('[SLService][saveList] New id created: ' + shoppingList.id);
     }
-    return this.slCollection.doc(shoppingList.id).set(Object.assign({}, shoppingList));
+    // if (shoppingList.itemsList) {
+    //   const saveableItemsList = Array.from(shoppingList.itemsList.values());
+    //   delete shoppingList.itemsList;
+    //   const saveableSL = {...shoppingList, itemsList: saveableItemsList};
+    //   return this.slCollection.doc(shoppingList.id).set(Object.assign({}, saveableSL));
+    // } else {
+      return this.slCollection.doc(shoppingList.id).set(Object.assign({}, shoppingList));
+    // }
   }
 
   deleteShoppingList(shoppingList: ShoppingList): Promise<any> {

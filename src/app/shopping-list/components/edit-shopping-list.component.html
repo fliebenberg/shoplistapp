@@ -20,14 +20,19 @@
     </div>
     <br>
     <h4 class="">Items</h4>
-    <button class="btn btn-success" type='button' click='addItem()'><i class='fas fa-cart-plus'></i>Add item</button>
-    <h5 *ngIf='!shoppingList.itemsList || (shoppingList.itemsList && shoppingList.itemsList.size === 0)'>No items added yet</h5>
+    <button class="btn btn-success" type='button' (click)='addItem()'><i class='fas fa-cart-plus'></i> Add item</button>
+    <h5 *ngIf='!shoppingList.itemsList || (shoppingList.itemsList && shoppingList.itemsList.length === 0)'>No items added yet</h5>
     <div *ngIf='shoppingList.itemsList' class="list-group">
       <div class='list-group-item list-group-item-action py-1' 
-      *ngFor='let item of shoppingList.itemsList.values()'
+      *ngFor='let listItem of shoppingList.itemsList'
       >
       <span>
-        {{item.name}}
+        {{listItem.item.name}}
+      </span>
+      <span class="float-right">
+        <i class='fas fa-plus-square' (click) = 'increaseItem(listItem.item)'></i>
+         {{listItem.qToBuy}} 
+        <i class='fas fa-minus-square' (click) = 'decreaseItem(listItem.item)'></i>
       </span>
     </div>
   </div>

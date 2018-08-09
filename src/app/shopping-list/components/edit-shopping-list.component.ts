@@ -1,3 +1,4 @@
+import { getCurrentSL } from './../store/shopping-list.reducer';
 import { Item } from './../../items/models/item.model';
 import { MyAuthService } from './../../core/services/my-auth.service';
 import { Store } from '@ngrx/store';
@@ -19,6 +20,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   shoppingList: ShoppingList;
   // editMode = false;
   paramSub: Subscription;
+  currentSLSub: Subscription;
 
   constructor(
     public authService: MyAuthService,
@@ -34,7 +36,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
       console.log('[EditSLComponent] Shopping Lists have not been loaded. Redirecting to Shopping List View.');
       this.router.navigate(['/lists']);
     } else {
-      console.log('[EDitSLComponent] Starting to search for id', this.slService.slLoading);
+      console.log('[EditSLComponent] Starting to search for id', this.slService.slLoading);
       this.paramSub = this.route.paramMap.subscribe(params => {
         const paramId = params.get('id');
         if (paramId) {
@@ -55,11 +57,14 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
         }
       });
       this.slStore.dispatch(new slActions.SetCurrentShoppingList(this.shoppingList));
+      this.currentSLSub = this.slStore.select(getCurrentSL).subscribe(currentSL => {
+        this.shoppingList = currentSL;
+      });
     }
   }
 
   saveList() {
-    this.slStore.dispatch(new slActions.UpdateShoppingList(this.shoppingList));
+    this.slStore.dispatch(new slActions.UpdateShoppingList(this.shoppingList.id));
   }
 
   deleteList() {
@@ -67,7 +72,21 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/lists']);
   }
 
+  addItem() {
+    console.log('[EditSLComponent] AddItem function called');
+    this.router.navigate(['list/' + this.shoppingList.id + '/additem']);
+  }
+
+  increaseItem(item: Item) {
+    this.slStore.dispatch(new slActions.IncreaseSLItem({item: item, SL: this.shoppingList.id}));
+  }
+
+  decreaseItem(item: Item) {
+    this.slStore.dispatch(new slActions.DecreaseSLItem({item: item, SL: this.shoppingList.id}));
+  }
+
   ngOnDestroy() {
     if (this.paramSub) { this.paramSub.unsubscribe(); }
+    if (this.currentSLSub) { this.currentSLSub.unsubscribe(); }
   }
 }
