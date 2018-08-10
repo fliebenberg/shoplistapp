@@ -42,7 +42,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.routeSub = combineLatest(this.route.url, this.route.paramMap, this.SLStore.select(getSLLoading)).subscribe(([url, paramMap, SLLoading]) => {
-      if (url[0].path === 'list' && paramMap.has('id')) {
+      if (url[0].path.includes('list') && paramMap.has('id')) {
         this.currentSL = this.SLService.getShoppingList(paramMap.get('id'));
         console.log('[ItemListComponent] ShoppingList: ', this.currentSL);
         this.allowEdit = false;
@@ -74,7 +74,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
   addSLItem(item: Item) {
     console.log('[ItemListComponent] Function addSLItem called. CurrentSL:', this.currentSL);
     this.SLStore.dispatch(new SLActions.IncreaseSLItem({item: item, SL: this.currentSL.id}));
-    this.router.navigate(['list/' + this.currentSL.id]);
+    this.router.navigate([this.currentSL.listType, this.currentSL.id]);
   }
   ngOnDestroy() {
     this.itemsSub.unsubscribe();

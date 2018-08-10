@@ -62,6 +62,7 @@ export class MyShoppingListService {
       if (slObject.id) {
         newSL.id = slObject.id;
       }
+      if (slObject.listType) { newSL.listType = slObject.listType; }
       if (slObject.name) { newSL.name = slObject.name; }
       if (slObject.description) { newSL.description = slObject.description; }
       if (slObject.dateCreated) { newSL.dateCreated = slObject.dateCreated; }
@@ -77,12 +78,15 @@ export class MyShoppingListService {
     return newSL;
   }
 
-  createNewSL(): ShoppingList {
+  createNewSL(listType?: string): ShoppingList {
     const newSL = new ShoppingList();
     if (this.currentUserId) {
       newSL.users[this.currentUserId] = 'owner';
     }
     newSL.name = this.formatDate(newSL.dateCreated);
+    if (listType) {
+      newSL.listType = listType;
+    }
     return newSL;
   }
 

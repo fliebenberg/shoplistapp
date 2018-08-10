@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './../core/app-routing.module';
 import { EditShoppingListComponent } from './components/edit-shopping-list.component';
-import { ViewShoppingListsComponent } from './components/shopping-lists.component';
+import { ShoppingListsComponent } from './components/shopping-lists.component';
 import { shoppingListReducer } from './store/shopping-list.reducer';
 import { ShoppingListEffects } from './store/shopping-list.effects';
 import { ShoppingListViewComponent } from './components/shopping-list-view.component';
@@ -19,6 +19,6 @@ import { ShoppingListViewComponent } from './components/shopping-list-view.compo
     StoreModule.forFeature('shoppingListsState', shoppingListReducer),
     EffectsModule.forFeature([ShoppingListEffects]),
   ],
-  declarations: [EditShoppingListComponent, ViewShoppingListsComponent, ShoppingListViewComponent]
+  declarations: [EditShoppingListComponent, ShoppingListsComponent, ShoppingListViewComponent]
 })
 export class ShoppingListModule { }

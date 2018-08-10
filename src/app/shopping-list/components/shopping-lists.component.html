@@ -1,21 +1,32 @@
-<h2 class='text-center'>Shopping Lists</h2>
-<button class="btn btn-block btn-success" type='button' (click)='newShoppingList()'>Create new shopping list</button>
+<h2>{{listType}}</h2>
+<div *ngIf='listType !== "qlist"'>
+  <h2 class='text-center'>Shopping Lists</h2>
+  <h4 class='text-center'><a routerLink = '/qlists'> Quick Lists</a></h4>
+</div>
+<div *ngIf='listType === "qlist"'>
+  <h2 class='text-center'>Quick Lists</h2>
+  <h4 class='text-center'><a routerLink = '/slists'> Shopping Lists</a></h4>
+</div>
+<button class="btn btn-block btn-success" type='button' (click)='newShoppingList()'>Create new list</button>
 <br>
-<h5 *ngIf='slService.slLoading'>
-  Loading Shopping Lists...
+<h5 *ngIf='SLService.slLoading'>
+  Loading Lists...
 </h5>
-<h5 *ngIf='(!slService.slLoading && (shoppingLists$ | async).length === 0)'>
-  No Shopping Lists to display
+<h5 *ngIf='(!SLService.slLoading && (shoppingLists$ | async).length === 0)'>
+  No Lists to display
 </h5>
 <div class='list-group'>
     <div class='list-group-item list-group-item-action py-1' 
       *ngFor='let shoppingList of shoppingLists$ | async'
-      routerLink='/list/{{shoppingList.id}}'>
+      routerLink='/{{shoppingList.listType}}/{{shoppingList.id}}'>
+      <span>
+        {{shoppingList.listType}}
+      </span>
       <span>
         {{shoppingList.name}}
       </span>
       <span class='text-right' style='font-size: 70%'>
-        {{'(' + slService.formatDate(shoppingList.dateCreated) + ')'}}
+        {{'(' + SLService.formatDate(shoppingList.dateCreated) + ')'}}
       </span>
     </div>
   </div>

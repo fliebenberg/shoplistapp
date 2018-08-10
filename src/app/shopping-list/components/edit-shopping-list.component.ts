@@ -2,13 +2,13 @@ import { getCurrentSL } from './../store/shopping-list.reducer';
 import { Item } from './../../items/models/item.model';
 import { MyAuthService } from './../../core/services/my-auth.service';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 // import { firestore } from 'firebase/app';
 import { MyShoppingListService } from '../my-shopping-list.service';
 import { MyMessageService, MessageType } from '../../core/services/my-message.service';
-import { ShoppingList } from './../models/shopping-list.model';
+import { ShoppingList, SLIST, QLIST } from './../models/shopping-list.model';
 import { ShoppingListsState } from '../store/shopping-list.reducer';
 import * as slActions from '../store/shopping-list.actions';
 
@@ -19,7 +19,8 @@ import * as slActions from '../store/shopping-list.actions';
 export class EditShoppingListComponent implements OnInit, OnDestroy {
   shoppingList: ShoppingList;
   // editMode = false;
-  paramSub: Subscription;
+  routeSub: Subscription;
+  listType: string = SLIST;
   currentSLSub: Subscription;
 
   constructor(
@@ -34,10 +35,11 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (!this.authService.currentUser || this.slService.slLoading) {
       console.log('[EditSLComponent] Shopping Lists have not been loaded. Redirecting to Shopping List View.');
-      this.router.navigate(['/lists']);
+      this.router.navigate(['/slists']);
     } else {
-      console.log('[EditSLComponent] Starting to search for id', this.slService.slLoading);
-      this.paramSub = this.route.paramMap.subscribe(params => {
+      console.log('[EditSLComponent] Starting to search for id. SLLoading: ', this.slService.slLoading);
+      this.routeSub = combineLatest(this.route.url, this.route.paramMap).subscribe(([url, params]) => {
+        if (url[0].path === 'qlist') { this.listType = QLIST; } else { this.listType = SLIST; }
         const paramId = params.get('id');
         if (paramId) {
           const foundSL = this.slService.getShoppingList(paramId);
@@ -48,10 +50,10 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
           } else {
             console.log('[EditSLComponent] Shopping List id ' + paramId + ' does not exist. Redirecting to Shopping List View.');
             this.messageService.addMessage('[EditSLComponent] Could not find shopping list with id ' + paramId + '.', MessageType.error, 10000);
-            this.router.navigate(['/lists']);
+            this.router.navigate([this.listType + 's']);
           }
         } else {
-          this.shoppingList = this.slService.createNewSL();
+          this.shoppingList = this.slService.createNewSL(this.listType);
           console.log('[EditSLComponent] New shopping list created.', this.shoppingList);
           this.slStore.dispatch(new slActions.AddShoppingList(this.shoppingList));
         }
@@ -69,12 +71,12 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   deleteList() {
     this.slStore.dispatch(new slActions.DeleteShoppingList(this.shoppingList));
-    this.router.navigate(['/lists']);
+    this.router.navigate([this.listType + 's']);
   }
 
   addItem() {
     console.log('[EditSLComponent] AddItem function called');
-    this.router.navigate(['list/' + this.shoppingList.id + '/additem']);
+    this.router.navigate([this.listType, this.shoppingList.id, 'additem']);
   }
 
   increaseItem(item: Item) {
@@ -86,7 +88,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.paramSub) { this.paramSub.unsubscribe(); }
+    if (this.routeSub) { this.routeSub.unsubscribe(); }
     if (this.currentSLSub) { this.currentSLSub.unsubscribe(); }
   }
 }

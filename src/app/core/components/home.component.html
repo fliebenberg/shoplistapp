@@ -18,13 +18,13 @@
       <button mat-raised-button color='secondary' type='button' routerLink="/signup">Sign Up</button>
     </div>
     <div *ngIf='existingShoppingLists'>
-      <button mat-raised-button color='primary' type='button' routerLink='/lists'>View Your Shopping Lists</button>
+      <button mat-raised-button color='primary' type='button' routerLink='/slists'>View Your Shopping Lists</button>
     </div>
   </div>
 </div>
 <mat-divider style='color: white' class='my-4'></mat-divider>
 <div *ngIf='!existingShoppingLists' fxLayoutAlign='center' class='p-4'>
-  <button mat-raised-button color='primary' type='button' routerLink='/list/add'>
+  <button mat-raised-button color='primary' type='button' routerLink='/slist/add'>
     Create your first shopping list
   </button>
 </div>

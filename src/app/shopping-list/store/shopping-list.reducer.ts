@@ -33,7 +33,7 @@ export function shoppingListReducer(state = initialSLState, action: SLActions.Ac
     }
     case SLActions.LOAD_SHOPPING_LISTS_FAILURE: {
       console.log('[ShoppingListReducer] Action LOAD_SHOPPING_LISTS_FAILURE called', action.payload);
-      return {...state, loading: false, shoppingLists: []};
+      return {...state, loading: true, shoppingLists: []};
     }
     case SLActions.ADD_SHOPPING_LIST: {
       console.log('[ShoppingListReducer] Action ADD_SHOPPING_LIST called', action.payload);
