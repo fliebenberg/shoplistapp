@@ -31,8 +31,7 @@
 <h4 *ngIf='!loading && filteredItems.length == 0'>No items to display. Check your filters or search text.</h4>
 <div class='list-group'>
   <div class='list-group-item list-group-item-action py-1' 
-    *ngFor='let item of filteredItems'
-    routerLink='/item/{{item.id}}'>
+    *ngFor='let item of filteredItems'>
     <span class=''>
       {{item.name}}
     </span>

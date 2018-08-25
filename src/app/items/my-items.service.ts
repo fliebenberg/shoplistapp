@@ -54,11 +54,11 @@ export class MyItemsService {
       this.itemsStore.dispatch(new ItemsActions.UpdateCategories(this.updateCategories(this.items, this.excludeCategories)));
     });
     this.itemsCollection = this.afStore.collection('items');
-    console.log('[ItemsService] About to subscribe to firebase...');
+    // console.log('[ItemsService] About to subscribe to firebase...');
     this.fbItems$ = this.itemsCollection.valueChanges();
     this.fbItems$.subscribe(
       (items) => {
-        console.log('[ItemsService] About to dispatch action LoadItemsSuccess');
+        // console.log('[ItemsService] About to dispatch action LoadItemsSuccess');
         this.itemsStore.dispatch(new ItemsActions.LoadItemsSuccess(items));
         this.items = items;
         this.itemsMap = new Map();
@@ -67,7 +67,7 @@ export class MyItemsService {
         });
       },
       error => {
-        console.log('[ItemsService] About to dispatch action LoadItemsFailure', error);
+        // console.log('[ItemsService] About to dispatch action LoadItemsFailure', error);
         this.itemsStore.dispatch(new ItemsActions.LoadItemsFailure(error));
       }
     );
@@ -82,16 +82,16 @@ export class MyItemsService {
     if (!this.loadingItems) {
       foundItem = this.itemsMap.get(itemId);
     } else {
-      console.log('[ItemsService][getItem] Error: Items not loaded');
+      // console.log('[ItemsService][getItem] Error: Items not loaded');
     }
     return foundItem;
   }
 
   saveItem(item: Item): Promise<any> {
-    console.log('[ItemsService][saveItem] Saving Item to firebase', item);
+    // console.log('[ItemsService][saveItem] Saving Item to firebase', item);
     if (!item.id || item.id.length === 0) {
       item.id = this.afStore.createId();
-      console.log('[ItemsService][SaveItem] New id created: ' + item.id);
+      // console.log('[ItemsService][SaveItem] New id created: ' + item.id);
     }
     return this.itemsCollection.doc(item.id).set(Object.assign({}, item));
   }
@@ -116,22 +116,22 @@ export class MyItemsService {
   }
 
   updateCategories(items: Item[], excludeCategories?: string[]): Map<string, boolean> {
-    console.log('[ItemsService] updateCategories starting', excludeCategories);
+    // console.log('[ItemsService] updateCategories starting', excludeCategories);
     const tempCategories = [];
     items.forEach(item => {
       if (!tempCategories.includes(item.category)) {
         tempCategories.push(item.category);
       }
     });
-    console.log('[ItemsService] updateCategories step 2', tempCategories);
+    // console.log('[ItemsService] updateCategories step 2', tempCategories);
     const tempCategoriesMap = new Map();
     tempCategories.sort().forEach(category => {
-      console.log('[ItemsService] updateCategories : current category: ' + category);
+      // console.log('[ItemsService] updateCategories : current category: ' + category);
       if (excludeCategories && excludeCategories.includes(category)) {
-        console.log('[ItemsService] updateCategories : excluding category ' + category);
+        // console.log('[ItemsService] updateCategories : excluding category ' + category);
         tempCategoriesMap.set(category, false);
       } else {
-        console.log('[ItemsService] updateCategories : including category ' + category);
+        // console.log('[ItemsService] updateCategories : including category ' + category);
         tempCategoriesMap.set(category, true);
       }
     });

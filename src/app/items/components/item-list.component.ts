@@ -12,6 +12,7 @@ import { MyItemsService } from '../my-items.service';
 import { ShoppingListsState } from '../../shopping-list/store/shopping-list.reducer';
 import { MyShoppingListService } from '../../shopping-list/my-shopping-list.service';
 import * as SLActions from '../../shopping-list/store/shopping-list.actions';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-item-list',
@@ -36,6 +37,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
     public SLService: MyShoppingListService,
     public route: ActivatedRoute,
     public router: Router,
+    public location: Location,
     public itemStore: Store<ItemsState>,
     public SLStore: Store<ShoppingListsState>
   ) {}
@@ -64,7 +66,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
   }
 
   addItem() {
-    this.router.navigate(['/items/add']);
+    this.router.navigate(['/items/add', {'back': ''}]);
   }
 
   applyFilter(searchText: string) {
@@ -74,9 +76,12 @@ export class ItemListComponent implements OnInit, OnDestroy {
   addSLItem(item: Item) {
     console.log('[ItemListComponent] Function addSLItem called. CurrentSL:', this.currentSL);
     this.SLStore.dispatch(new SLActions.IncreaseSLItem({item: item, SL: this.currentSL.id}));
-    this.router.navigate([this.currentSL.listType, this.currentSL.id]);
+    console.log('[ItemListComponent] Going back...', this.location);
+    this.location.back();
+    // this.router.navigate([this.currentSL.listType, this.currentSL.id]);
   }
   ngOnDestroy() {
+    this.routeSub.unsubscribe();
     this.itemsSub.unsubscribe();
   }
 }

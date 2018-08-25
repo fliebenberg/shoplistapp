@@ -13,32 +13,35 @@ import { CategoriesFilterComponent } from '../items/components/filters/categorie
 import { ProvidersFilterComponent } from '../items/components/filters/providers-filter.component';
 import { ShoppingListsComponent } from '../shopping-list/components/shopping-lists.component';
 import { EditShoppingListComponent } from './../shopping-list/components/edit-shopping-list.component';
+import { BackButtonGuard } from './services/back-button.guard';
 
 const routes: Routes = [
-  {path: '', component: HomeComponent, pathMatch: 'full'},
-  {path: 'login', component: UserLoginComponent},
-  {path: 'signup', component: UserLoginComponent, data: {signUp: true}},
-  {path: 'user', component: UserComponent},
-  {path: 'items', component: ItemListComponent},
-  {path: 'items/add', component: ItemEditComponent},
-  {path: 'items/filters', component: ItemFiltersComponent,
-    children: [
-      {path: '', redirectTo: 'categories', pathMatch: 'full'},
-      {path: 'categories', component: CategoriesFilterComponent},
-      {path: 'providers', component: ProvidersFilterComponent}
-    ]
-  },
-  {path: 'item/:id', component: ItemViewComponent},
-  {path: 'item/:id/edit', component: ItemEditComponent},
-  {path: 'slists', component: ShoppingListsComponent},
-  {path: 'slist/add', component: EditShoppingListComponent},
-  {path: 'slist/:id', component: EditShoppingListComponent},
-  {path: 'slist/:id/additem', component: ItemListComponent},
-  {path: 'qlists', component: ShoppingListsComponent},
-  {path: 'qlist/add', component: EditShoppingListComponent},
-  {path: 'qlist/:id', component: EditShoppingListComponent},
-  {path: 'qlist/:id/additem', component: ItemListComponent},
-  {path: '**', component: PageNotFoundComponent}
+  {path: '', canActivateChild: [BackButtonGuard], children: [
+    {path: '', component: HomeComponent, pathMatch: 'full'},
+    {path: 'login', component: UserLoginComponent},
+    {path: 'signup', component: UserLoginComponent, data: {signUp: true}},
+    {path: 'user', component: UserComponent},
+    {path: 'items', component: ItemListComponent},
+    {path: 'items/add', component: ItemEditComponent},
+    {path: 'items/filters', component: ItemFiltersComponent,
+      children: [
+        {path: '', redirectTo: 'categories', pathMatch: 'full'},
+        {path: 'categories', component: CategoriesFilterComponent},
+        {path: 'providers', component: ProvidersFilterComponent}
+      ]
+    },
+    {path: 'item/:id', component: ItemViewComponent},
+    {path: 'item/:id/edit', component: ItemEditComponent},
+    {path: 'slists', component: ShoppingListsComponent},
+    {path: 'slist/add', component: EditShoppingListComponent},
+    {path: 'slist/:id', component: EditShoppingListComponent},
+    {path: 'slist/:id/additem', component: ItemListComponent},
+    {path: 'qlists', component: ShoppingListsComponent},
+    {path: 'qlist/add', component: EditShoppingListComponent},
+    {path: 'qlist/:id', component: EditShoppingListComponent},
+    {path: 'qlist/:id/additem', component: ItemListComponent},
+    {path: '**', component: PageNotFoundComponent}
+  ]}
 ];
 
 @NgModule({

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { firestore } from 'firebase/app';
-import { ShoppingList } from './models/shopping-list.model';
+import { ShoppingList, SLIST } from './models/shopping-list.model';
 import { ShoppingListsState, getSLLoading, getSLArray } from './store/shopping-list.reducer';
 import * as SLActions from './store/shopping-list.actions';
 import { UserState, getUser } from '../user/store/user.reducer';
@@ -36,7 +36,7 @@ export class MyShoppingListService {
             this.currentUserId = user.id;
             this.afStore.collection('shoppingLists', ref => ref.where('users.' + user.id, '==', 'owner')).valueChanges()
               .subscribe(slAsOwner => {
-                console.log('[SLService] calling action LOAD_SHOPPINGLISTS', slAsOwner);
+                console.log('[SLService] SLSub calling action LOAD_SHOPPINGLISTS', slAsOwner);
                 const slCombined = [...slAsOwner];
                 this.slStore.dispatch(new SLActions.LoadShoppingLists(slCombined));
               });
@@ -80,13 +80,27 @@ export class MyShoppingListService {
 
   createNewSL(listType?: string): ShoppingList {
     const newSL = new ShoppingList();
+    newSL.id = this.afStore.createId();
     if (this.currentUserId) {
       newSL.users[this.currentUserId] = 'owner';
     }
-    newSL.name = this.formatDate(newSL.dateCreated);
     if (listType) {
       newSL.listType = listType;
+      if (listType === SLIST) {
+        newSL.name = "Shopping List ";
+      } else {
+        newSL.name = "Quick List ";
+      }
+      newSL.name += newSL.dateCreated.toDate().toLocaleDateString(undefined,
+        { day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        }
+      );
     }
+    this.slMap.set(newSL.id, newSL);
+    console.log('[SLService] New shopping list created', newSL);
+
     return newSL;
   }
 
@@ -105,6 +119,9 @@ export class MyShoppingListService {
     } else {
       console.log('[SLService][getShoppingList] Error: Shopping Lists not loaded');
     }
+    if (!foundSL) {
+      console.log('[SLService] [getShoppingList] Shopping list id not found.', slId);
+    }
     return foundSL;
   }
 
@@ -120,7 +137,7 @@ export class MyShoppingListService {
     //   const saveableSL = {...shoppingList, itemsList: saveableItemsList};
     //   return this.slCollection.doc(shoppingList.id).set(Object.assign({}, saveableSL));
     // } else {
-      return this.slCollection.doc(shoppingList.id).set(Object.assign({}, shoppingList));
+    return this.slCollection.doc(shoppingList.id).set(Object.assign({}, shoppingList));
     // }
   }
 

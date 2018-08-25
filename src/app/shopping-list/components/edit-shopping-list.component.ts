@@ -1,15 +1,15 @@
-import { getCurrentSL } from './../store/shopping-list.reducer';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription, combineLatest } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { MyMessageService, MessageType } from '../../core/services/my-message.service';
 import { Item } from './../../items/models/item.model';
 import { MyAuthService } from './../../core/services/my-auth.service';
-import { Store } from '@ngrx/store';
-import { Subscription, combineLatest } from 'rxjs';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 // import { firestore } from 'firebase/app';
-import { MyShoppingListService } from '../my-shopping-list.service';
-import { MyMessageService, MessageType } from '../../core/services/my-message.service';
 import { ShoppingList, SLIST, QLIST } from './../models/shopping-list.model';
-import { ShoppingListsState } from '../store/shopping-list.reducer';
+import { MyShoppingListService } from '../my-shopping-list.service';
+import { ShoppingListsState, getCurrentSL } from '../store/shopping-list.reducer';
 import * as slActions from '../store/shopping-list.actions';
 
 @Component({
@@ -18,7 +18,6 @@ import * as slActions from '../store/shopping-list.actions';
 })
 export class EditShoppingListComponent implements OnInit, OnDestroy {
   shoppingList: ShoppingList;
-  // editMode = false;
   routeSub: Subscription;
   listType: string = SLIST;
   currentSLSub: Subscription;
@@ -37,13 +36,13 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
       console.log('[EditSLComponent] Shopping Lists have not been loaded. Redirecting to Shopping List View.');
       this.router.navigate(['/slists']);
     } else {
-      console.log('[EditSLComponent] Starting to search for id. SLLoading: ', this.slService.slLoading);
+      // console.log('[EditSLComponent] Starting to search for id. SLLoading: ', this.slService.slLoading);
       this.routeSub = combineLatest(this.route.url, this.route.paramMap).subscribe(([url, params]) => {
         if (url[0].path === 'qlist') { this.listType = QLIST; } else { this.listType = SLIST; }
         const paramId = params.get('id');
         if (paramId) {
           const foundSL = this.slService.getShoppingList(paramId);
-          console.log('[EditSLComponent] Found Shopping List: ', foundSL);
+          // console.log('[EditSLComponent] Found Shopping List: ', foundSL);
           if (foundSL) {
             this.shoppingList = foundSL;
             // this.editMode = true;
@@ -53,9 +52,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
             this.router.navigate([this.listType + 's']);
           }
         } else {
-          this.shoppingList = this.slService.createNewSL(this.listType);
-          console.log('[EditSLComponent] New shopping list created.', this.shoppingList);
-          this.slStore.dispatch(new slActions.AddShoppingList(this.shoppingList));
+          console.log('No parameter id found.', paramId);
         }
       });
       this.slStore.dispatch(new slActions.SetCurrentShoppingList(this.shoppingList));
@@ -76,7 +73,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   addItem() {
     console.log('[EditSLComponent] AddItem function called');
-    this.router.navigate([this.listType, this.shoppingList.id, 'additem']);
+    this.router.navigate([this.listType, this.shoppingList.id, 'additem', {'back': ''}]);
   }
 
   increaseItem(item: Item) {

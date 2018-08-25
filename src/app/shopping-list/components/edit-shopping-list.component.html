@@ -1,5 +1,5 @@
 <div>
-  <h2 class="text-center">Edit {{listType}} List</h2>
+  <h2 class="text-center">Edit {{listType==="slist"?"Shopping":"Quick"}} List</h2>
   <div *ngIf='shoppingList'>
     <br>
     <form #SLForm='ngForm'>
@@ -20,7 +20,9 @@
     </div>
     <br>
     <h4 class="">Items</h4>
-    <button class="btn btn-success" type='button' (click)='addItem()'><i class='fas fa-cart-plus'></i> Add item</button>
+    <button class="btn btn-success" type='button' (click)='addItem()'>
+      <i class='fas fa-cart-plus'></i> Add item
+    </button>
     <h5 *ngIf='!shoppingList.itemsList || (shoppingList.itemsList && shoppingList.itemsList.length === 0)'>No items added yet</h5>
     <div *ngIf='shoppingList.itemsList' class="list-group">
       <div class='list-group-item list-group-item-action py-1' 

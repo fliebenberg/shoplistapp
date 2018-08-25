@@ -23,6 +23,7 @@ import { PageNotFoundComponent } from './components/page-not-found.component';
 import { MessageToastComponent } from './components/message-toast.component';
 // import { itemsReducer } from '../items/store/items.reducer';
 import { EffectsModule } from '@ngrx/effects';
+import { UIReducer } from './store/ui.reducer';
 // import { ItemsEffects } from '../items/store/items.effects';
 
 @NgModule({
@@ -41,7 +42,7 @@ import { EffectsModule } from '@ngrx/effects';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AppRoutingModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot({'uiState': UIReducer}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({}),
     MyMaterialModule,
