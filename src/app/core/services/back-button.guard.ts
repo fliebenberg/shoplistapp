@@ -13,7 +13,7 @@ export class BackButtonGuard implements CanActivate, CanActivateChild {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     console.log('[BackButtonGuard]', route, state);
     if (route.paramMap.has('back')) {
-      this.uiStore.dispatch(new UIActions.ShowBackButton());
+      this.uiStore.dispatch(new UIActions.ShowBackButton(route.paramMap.get('back')));
     } else {
       this.uiStore.dispatch(new UIActions.HideBackButton());
     }

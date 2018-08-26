@@ -19,20 +19,21 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color='primary' fxLayout='row'>
-      <button mat-icon-button *ngIf='!(showBackButton$ | async)' (click)='sideNav.toggle()' type="menu" class='mr-1'>
-        <mat-icon>menu</mat-icon>
-      </button>
-      <button mat-icon-button *ngIf='(showBackButton$ | async)' (click)='goBack()'>
-        <mat-icon>arrow_back</mat-icon>
-        <!-- <a mat-list-item class='title' (click)='goBack()'><h3><<</h3></a> -->
-      </button>
-      <mat-nav-list>
+      <mat-nav-list *ngIf="backButtonStr !== ''" fxLayout='row'>
+        <button mat-icon-button (click)='goBack()'>
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <a mat-list-item class='title'><h3>{{backButtonStr}}</h3></a>
+      </mat-nav-list>
+      <mat-nav-list *ngIf="backButtonStr === ''" fxLayout='row'>
+        <button mat-icon-button (click)='sideNav.toggle()' type="menu" class='mr-1'>
+          <mat-icon>menu</mat-icon>
+        </button>
         <a mat-list-item class='title' routerLink='/'><h3>{{title}}</h3></a>
+        <a mat-list-item fxHide.lt-md='true' routerLink='/slists'>Lists</a>
+        <a mat-list-item fxHide.lt-md='true' routerLink='/items'>Items</a>
       </mat-nav-list>
-      <mat-nav-list fxLayout='row' fxHide.lt-md='true'>
-        <a mat-list-item routerLink='/slists'>Lists</a>
-        <a mat-list-item routerLink='/items'>Items</a>
-      </mat-nav-list>
+      
       <span class='ml-auto'>
         <mat-nav-list fxLayout='row' *ngIf='!authService.currentUser'>
           <a mat-list-item routerLink='/login'>Sign In</a>

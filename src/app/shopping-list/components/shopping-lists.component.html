@@ -17,7 +17,7 @@
 <div class='list-group'>
     <div class='list-group-item list-group-item-action py-1' 
       *ngFor='let shoppingList of shoppingLists$ | async'
-      [routerLink]="['/',shoppingList.listType,shoppingList.id,{back: ''}]">
+      [routerLink]="['/',shoppingList.listType,shoppingList.id,{back: shoppingList.listType !== 'qlist'?'Shopping Lists':'Quick Lists'}]">
       <span>
         {{shoppingList.name}}
       </span>

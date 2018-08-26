@@ -73,7 +73,7 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
 
   addItem() {
     console.log('[EditSLComponent] AddItem function called');
-    this.router.navigate([this.listType, this.shoppingList.id, 'additem', {'back': ''}]);
+    this.router.navigate([this.listType, this.shoppingList.id, 'additem', {'back': this.shoppingList.name}]);
   }
 
   increaseItem(item: Item) {
