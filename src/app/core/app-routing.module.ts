@@ -36,6 +36,7 @@ const routes: Routes = [
     {path: 'slist/add', component: EditShoppingListComponent},
     {path: 'slist/:id', component: EditShoppingListComponent},
     {path: 'slist/:id/additem', component: ItemListComponent},
+    {path: 'slist/:id/addqlist', component: ShoppingListsComponent},
     {path: 'qlists', component: ShoppingListsComponent},
     {path: 'qlist/add', component: EditShoppingListComponent},
     {path: 'qlist/:id', component: EditShoppingListComponent},

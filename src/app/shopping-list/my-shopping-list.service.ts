@@ -1,5 +1,6 @@
+import { ListQL } from './models/list-ql.model';
 import { MyAuthService } from './../core/services/my-auth.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, distinctUntilChanged } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -34,11 +35,12 @@ export class MyShoppingListService {
           if (user.id && user.id !== this.currentUserId) {
             console.log('[SLService] User changed: New UserId:' + user.id);
             this.currentUserId = user.id;
-            this.afStore.collection('shoppingLists', ref => ref.where('users.' + user.id, '==', 'owner')).valueChanges()
+            this.afStore.collection('shoppingLists', ref => ref.where('users.' + user.id, '==', 'owner'))
+              .valueChanges()
               .subscribe(slAsOwner => {
-                console.log('[SLService] SLSub calling action LOAD_SHOPPINGLISTS', slAsOwner);
-                const slCombined = [...slAsOwner];
-                this.slStore.dispatch(new SLActions.LoadShoppingLists(slCombined));
+                  console.log('[SLService] SLSub calling action LOAD_SHOPPINGLISTS', slAsOwner);
+                  const slCombined = [...slAsOwner];
+                  this.slStore.dispatch(new SLActions.LoadShoppingLists(slCombined));
               });
           }
         } else {
@@ -68,6 +70,7 @@ export class MyShoppingListService {
       if (slObject.dateCreated) { newSL.dateCreated = slObject.dateCreated; }
       if (slObject.users) { newSL.users = slObject.users; }
       if (slObject.itemsList) { newSL.itemsList = slObject.itemsList; }
+      if (slObject.quickLists) { newSL.quickLists = slObject.quickLists; }
         // newSL.itemsList = new Map();
         // slObject.itemsList.forEach((listItem: ListItem) => {
         //   newSL.itemsList.set(listItem.item.id, listItem);
@@ -131,13 +134,18 @@ export class MyShoppingListService {
       shoppingList.id = this.afStore.createId();
       console.log('[SLService][saveList] New id created: ' + shoppingList.id);
     }
-    // if (shoppingList.itemsList) {
-    //   const saveableItemsList = Array.from(shoppingList.itemsList.values());
-    //   delete shoppingList.itemsList;
-    //   const saveableSL = {...shoppingList, itemsList: saveableItemsList};
-    //   return this.slCollection.doc(shoppingList.id).set(Object.assign({}, saveableSL));
-    // } else {
-    return this.slCollection.doc(shoppingList.id).set(Object.assign({}, shoppingList));
+    const convertedItemsList = shoppingList.itemsList.map((listItem: ListItem) => {
+      return Object.assign({}, listItem);
+    });
+    const convertedQuickLists = shoppingList.quickLists.map((listQL: ListQL) => {
+      return Object.assign({}, {quickList: {...listQL.quickList}, qNeeded: listQL.qNeeded});
+    });
+    const saveableObject = {
+      ...shoppingList,
+      itemsList: [...convertedItemsList],
+      quickLists: [...convertedQuickLists]
+    };
+    return this.slCollection.doc(shoppingList.id).set(Object.assign({}, saveableObject));
     // }
   }
 

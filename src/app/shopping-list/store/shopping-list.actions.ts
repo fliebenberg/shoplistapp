@@ -1,3 +1,4 @@
+import { QuickList } from './../models/quick-list.model';
 import { ShoppingList } from './../models/shopping-list.model';
 import { Action } from "@ngrx/store";
 import { Item } from '../../items/models/item.model';
@@ -20,6 +21,8 @@ export const SET_CURRENT_SHOPPING_LIST = '[shopping list] Set Current Shopping L
 export const LOAD_SL_ITEMS = '[shopping list] Load items for the specified Shopping List';
 export const INCREASE_SL_ITEM = '[shopping list] Increase item in the specified Shopping List';
 export const DECREASE_SL_ITEM = '[shopping list] Decrease item in the specified Shopping List';
+export const INCREASE_SL_QLIST = '[shopping list] Increase QList in the specified Shopping List';
+export const DECREASE_SL_QLIST = '[shopping list] Decrease QList in the specified Shopping List';
 
 export class LoadShoppingLists implements Action {
     readonly type = LOAD_SHOPPING_LISTS;
@@ -93,7 +96,7 @@ export class SetCurrentShoppingList implements Action {
 
 export class LoadSLItems implements Action {
     readonly type = LOAD_SL_ITEMS;
-    constructor (public payload: string) {} // ShoppingList id to load items fort
+    constructor (public payload: string) {} // ShoppingList id to load items for
 }
 
 export class IncreaseSLItem implements Action {
@@ -103,7 +106,17 @@ export class IncreaseSLItem implements Action {
 
 export class DecreaseSLItem implements Action {
     readonly type = DECREASE_SL_ITEM;
-    constructor (public payload: {item: Item, SL: string}) {} // Item to add to Shoppinglist, Id if shoppinglist
+    constructor (public payload: {item: Item, SL: string}) {} // Item to add to Shoppinglist, Id of shoppinglist
+}
+
+export class IncreaseSLQList implements Action {
+    readonly type = INCREASE_SL_QLIST;
+    constructor (public payload: {quickList: ShoppingList, SL: string}) {} // QList to add to / increase in Shoppinglist SL
+}
+
+export class DecreaseSLQList implements Action {
+    readonly type = DECREASE_SL_QLIST;
+    constructor (public payload: {quickList: ShoppingList, SL: string}) {} // QList to decrease in Shoppinglist SL
 }
 
 export type Actions =
@@ -123,4 +136,6 @@ export type Actions =
     SetCurrentShoppingList |
     LoadSLItems |
     IncreaseSLItem |
-    DecreaseSLItem;
+    DecreaseSLItem |
+    IncreaseSLQList |
+    DecreaseSLQList;

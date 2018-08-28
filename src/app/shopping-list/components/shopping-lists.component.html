@@ -16,13 +16,13 @@
 </h5>
 <div class='list-group'>
     <div class='list-group-item list-group-item-action py-1' 
-      *ngFor='let shoppingList of shoppingLists$ | async'
-      [routerLink]="['/',shoppingList.listType,shoppingList.id,{back: shoppingList.listType !== 'qlist'?'Shopping Lists':'Quick Lists'}]">
+      *ngFor='let list of shoppingLists$ | async'
+      (click) = 'listSelected(list)'>
       <span>
-        {{shoppingList.name}}
+        {{list.name}}
       </span>
       <span class='text-right' style='font-size: 70%'>
-        {{'(' + SLService.formatDate(shoppingList.dateCreated) + ')'}}
+        {{'(' + SLService.formatDate(list.dateCreated) + ')'}}
       </span>
     </div>
   </div>

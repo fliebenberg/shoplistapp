@@ -2,6 +2,8 @@ import { ListItem } from './../models/list-item.model';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ShoppingList } from './../models/shopping-list.model';
 import * as SLActions from './shopping-list.actions';
+import { QuickList } from '../models/quick-list.model';
+import { ListQL } from '../models/list-ql.model';
 
 export interface ShoppingListsState {
   shoppingLists: ShoppingList[];
@@ -15,7 +17,7 @@ export interface ShoppingListsState {
 export const initialSLState: ShoppingListsState = {
   shoppingLists: [],
   currentSL: null,
-  loading: true,
+  loading: false,
   updating: false,
   adding: false,
   deleting: false,
@@ -33,7 +35,7 @@ export function shoppingListReducer(state = initialSLState, action: SLActions.Ac
     }
     case SLActions.LOAD_SHOPPING_LISTS_FAILURE: {
       console.log('[ShoppingListReducer] Action LOAD_SHOPPING_LISTS_FAILURE called', action.payload);
-      return {...state, loading: true, shoppingLists: []};
+      return {...initialSLState};
     }
     case SLActions.ADD_SHOPPING_LIST: {
       console.log('[ShoppingListReducer] Action ADD_SHOPPING_LIST called', action.payload);
@@ -100,12 +102,7 @@ export function shoppingListReducer(state = initialSLState, action: SLActions.Ac
         newSL.itemsList = [{item: action.payload.item, qNeeded: 1, qStock: 0, qToBuy: 1}];
         console.log('[ShoppingListReducer] New itemsList created. NewSL:', newSL);
       }
-      let newSLArray = [...state.shoppingLists];
-      newSLArray = newSLArray.map((SL: ShoppingList) => {
-        if (SL.id === newSL.id) {
-          return newSL;
-        } else { return SL; }
-      });
+      const newSLArray = updateSLArray([...state.shoppingLists], newSL);
       const newState = {...state, currentSL: newSL, shoppingLists: newSLArray};
       console.log('[ShoppingListReducer] New State:', newState);
       return {...newState};
@@ -136,12 +133,63 @@ export function shoppingListReducer(state = initialSLState, action: SLActions.Ac
       } else {
         console.log('[ShoppingListReducer] No itemsList found. NewSL:', newSL);
       }
-      let newSLArray = [...state.shoppingLists];
-      newSLArray = newSLArray.map((SL: ShoppingList) => {
-        if (SL.id === newSL.id) {
-          return newSL;
-        } else { return SL; }
-      });
+      const newSLArray = updateSLArray([...state.shoppingLists], newSL);
+      const newState = {...state, currentSL: newSL, shoppingLists: newSLArray};
+      console.log('[ShoppingListReducer] New State:', newState);
+      return {...newState};
+    }
+    case SLActions.INCREASE_SL_QLIST: {
+      console.log('[ShoppingListReducer] Action INCREASE_SL_QLIST called', action.payload);
+      const newSL: ShoppingList = {...state.currentSL};
+      if (newSL.quickLists) {
+        let foundQList = false;
+        newSL.quickLists = newSL.quickLists.map((listQL: ListQL) => {
+          if (!foundQList && listQL.quickList.id === action.payload.quickList.id) {
+            listQL.qNeeded ++;
+            newSL.itemsList = addQLItemsToSL(listQL.quickList, newSL);
+            foundQList = true;
+          }
+          return listQL;
+        });
+        if (!foundQList) {
+          newSL.quickLists.push({quickList: action.payload.quickList, qNeeded: 1});
+          newSL.itemsList = addQLItemsToSL(action.payload.quickList, newSL);
+        }
+      } else {
+        console.log('[ShoppingListReducer] No quickLists found. NewSL:', newSL);
+        newSL.quickLists = [{quickList: action.payload.quickList, qNeeded: 1}];
+        newSL.itemsList = addQLItemsToSL(action.payload.quickList, newSL);
+        console.log('[ShoppingListReducer] New quickLists created. NewSL:', newSL);
+      }
+      const newSLArray = updateSLArray([...state.shoppingLists], newSL);
+      const newState = {...state, currentSL: newSL, shoppingLists: newSLArray};
+      console.log('[ShoppingListReducer] New State:', newState);
+      return {...newState};
+    }
+    case SLActions.DECREASE_SL_QLIST: {
+      console.log('[ShoppingListReducer] Action DECREASE_SL_QLIST called', action.payload);
+      const newSL: ShoppingList = {...state.currentSL};
+      if (newSL.quickLists) {
+        let foundQList = false;
+        let deleteQList = -1;
+        newSL.quickLists = newSL.quickLists.map((listQL: ListQL, index: number) => {
+          if (!foundQList && listQL.quickList.id === action.payload.quickList.id) {
+            listQL.qNeeded --;
+            if (listQL.qNeeded <= 0) {
+              deleteQList = index;
+            }
+            // newSL.itemsList = addQLItemsToSL(listQL.quickList, newSL);
+            foundQList = true;
+          }
+          return listQL;
+        });
+        if (deleteQList >= 0) {
+          newSL.quickLists.splice(deleteQList, 1);
+        }
+      } else {
+        console.log('[ShoppingListReducer] No quickLists found. NewSL:', newSL);
+      }
+      const newSLArray = updateSLArray([...state.shoppingLists], newSL);
       const newState = {...state, currentSL: newSL, shoppingLists: newSLArray};
       console.log('[ShoppingListReducer] New State:', newState);
       return {...newState};
@@ -157,3 +205,32 @@ export const getSLState = createFeatureSelector<ShoppingListsState>('shoppingLis
 export const getSLArray = createSelector(getSLState, slState => slState.shoppingLists);
 export const getCurrentSL = createSelector(getSLState, slState => slState.currentSL);
 export const getSLLoading = createSelector(getSLState, slState => slState.loading);
+
+
+function updateSLArray(oldSLArray: ShoppingList[], newSL: ShoppingList): ShoppingList[] {
+  const newSLArray = oldSLArray.map((SL: ShoppingList) => {
+    if (SL.id === newSL.id) {
+      return newSL;
+    } else { return SL; }
+  });
+  return newSLArray;
+}
+
+function addQLItemsToSL(ql: ShoppingList, sl: ShoppingList): ListItem[] {
+  const newSL = {...sl};
+  ql.itemsList.forEach((qlListItem: ListItem) => {
+    let foundQLItem = false;
+    newSL.itemsList = newSL.itemsList.map((slListItem: ListItem) => {
+      if (!foundQLItem && slListItem.item.id === qlListItem.item.id) {
+        slListItem.qNeeded += qlListItem.qNeeded;
+        slListItem.qToBuy += qlListItem.qNeeded;
+        foundQLItem = true;
+      }
+      return slListItem;
+    });
+    if (!foundQLItem) {
+      newSL.itemsList.push({item: qlListItem.item, qNeeded: qlListItem.qNeeded, qStock: 0, qToBuy: qlListItem.qNeeded});
+    }
+  });
+  return newSL.itemsList;
+}

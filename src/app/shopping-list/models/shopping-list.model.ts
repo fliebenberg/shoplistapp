@@ -1,4 +1,5 @@
 import { ListItem } from './list-item.model';
+import { ListQL } from './list-ql.model';
 import { firestore } from 'firebase/app';
 
 export const SLIST = 'slist';
@@ -15,6 +16,6 @@ export class ShoppingList {
     public itemsList: ListItem[] = [],
     // public itemsListMap: Map<string, ListItem> = null,
     public noItems: number = 0,
-    public quickLists: string[] = []
+    public quickLists: ListQL[] = []
   ) { }
 }

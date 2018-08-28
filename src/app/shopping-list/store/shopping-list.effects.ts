@@ -60,7 +60,7 @@ export class ShoppingListEffects {
     ofType(SLActions.UPDATE_SHOPPING_LIST),
     switchMap((action: SLActions.UpdateShoppingList) => {
       const SLToUpdate: ShoppingList = this.SLService.getShoppingList(action.payload);
-      console.log('[SLEffects] Efect UPDATE_SHOPPING_LIST SLToUpdate:', SLToUpdate);
+      console.log('[SLEffects] Effect UPDATE_SHOPPING_LIST SLToUpdate:', SLToUpdate);
       return this.SLService.saveShoppingList(SLToUpdate)
       .then(
         () => {
@@ -75,7 +75,7 @@ export class ShoppingListEffects {
     })
   );
   @Effect()
-  IncreaseSLItem$: Observable<Action> = this.actions$.pipe(
+  increaseSLItem$: Observable<Action> = this.actions$.pipe(
     ofType(SLActions.INCREASE_SL_ITEM),
     map((action: SLActions.IncreaseSLItem) => {
       console.log('[SLEffects] Effect IncreaseSLItem calling action UPDATE_SHOPPING_LIST', action.payload.SL);
@@ -83,10 +83,26 @@ export class ShoppingListEffects {
     })
   );
   @Effect()
-  DecreaseSLItem$: Observable<Action> = this.actions$.pipe(
+  decreaseSLItem$: Observable<Action> = this.actions$.pipe(
     ofType(SLActions.DECREASE_SL_ITEM),
     map((action: SLActions.DecreaseSLItem) => {
       console.log('[SLEffects] Effect DecreaseSLItem calling action UPDATE_SHOPPING_LIST', action.payload.SL);
+      return new SLActions.UpdateShoppingList(action.payload.SL);
+    })
+  );
+  @Effect()
+  increaseSLQList$: Observable<Action> = this.actions$.pipe(
+    ofType(SLActions.INCREASE_SL_QLIST),
+    map((action: SLActions.IncreaseSLQList) => {
+      console.log('[SLEffects] Effect IncreaseSLQList calling action UPDATE_SHOPPING_LIST', action.payload.SL);
+      return new SLActions.UpdateShoppingList(action.payload.SL);
+    })
+  );
+  @Effect()
+  decreaseSLQList$: Observable<Action> = this.actions$.pipe(
+    ofType(SLActions.DECREASE_SL_QLIST),
+    map((action: SLActions.DecreaseSLQList) => {
+      console.log('[SLEffects] Effect DecreaseSLQList calling action UPDATE_SHOPPING_LIST', action.payload.SL);
       return new SLActions.UpdateShoppingList(action.payload.SL);
     })
   );

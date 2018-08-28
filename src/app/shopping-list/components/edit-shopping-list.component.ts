@@ -76,12 +76,25 @@ export class EditShoppingListComponent implements OnInit, OnDestroy {
     this.router.navigate([this.listType, this.shoppingList.id, 'additem', {'back': this.shoppingList.name}]);
   }
 
+  addQList() {
+    console.log('[EditSLComponent] AddQList function called');
+    this.router.navigate([this.listType, this.shoppingList.id, 'addqlist', {'back': this.shoppingList.name}]);
+  }
+
   increaseItem(item: Item) {
     this.slStore.dispatch(new slActions.IncreaseSLItem({item: item, SL: this.shoppingList.id}));
   }
 
   decreaseItem(item: Item) {
     this.slStore.dispatch(new slActions.DecreaseSLItem({item: item, SL: this.shoppingList.id}));
+  }
+
+  increaseQL(ql: ShoppingList) {
+    this.slStore.dispatch(new slActions.IncreaseSLQList({quickList: ql, SL: this.shoppingList.id}));
+  }
+
+  decreaseQL(ql: ShoppingList) {
+    this.slStore.dispatch(new slActions.DecreaseSLQList({quickList: ql, SL: this.shoppingList.id}));
   }
 
   ngOnDestroy() {
